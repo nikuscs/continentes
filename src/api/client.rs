@@ -14,7 +14,6 @@ use crate::error::{ContinenteError, Result};
 // =============================================================================
 // Continente SFCC Controller Endpoints Reference
 // Base: https://www.continente.pt/on/demandware.store/Sites-continente-Site/default/{Controller}
-// Full investigation: docs/investigation.md
 // =============================================================================
 //
 // --- Search & Products (implemented) ---
@@ -23,19 +22,19 @@ use crate::error::{ContinenteError, Result};
 // Product-Variation                     GET  JSON   Product detail (best endpoint)
 // Product-ProductNutritionalInfoTab     GET  HTML   Nutritional info table
 //
-// --- Search & Products (not implemented) ---
-// Search-UpdateGrid                     GET  HTML   Product grid update (alt search)
-// Product-Show                          GET  HTML   Full product page
-// Product-ShowQuickView                 GET  HTML   Quick view modal
-// Product-ShowNote                      GET  HTML   Product notes
+// --- Search & Products (redundant — covered by implemented endpoints) ---
+// Search-UpdateGrid                     GET  HTML   Same data as Search-ShowAjax
+// Product-Show                          GET  HTML   Needs browser; Product-Variation is better
+// Product-ShowQuickView                 GET  HTML   Subset of Product-Variation JSON
+// Product-ShowNote                      GET  HTML   Rarely populated
 //
 // --- Stores (implemented) ---
 // Stores-FindStores                     GET  JSON   Find stores by lat/lon/radius
 //
-// --- Stores (not implemented) ---
-// Stores-GetCoverageArea                GET  JSON   Delivery coverage area
-// Stores-GetDelivery                    GET  JSON   Delivery options
-// Stores-SetStoreContext                POST        Set active store context
+// --- Stores (not useful without auth/postal code) ---
+// Stores-GetCoverageArea                GET  JSON   Requires postal code, not lat/lon
+// Stores-GetDelivery                    GET  HTML   Returns form HTML, no data
+// Stores-SetStoreContext                POST        Session-scoped, requires auth
 //
 // --- Cart & Checkout (requires auth) ---
 // Cart-AddProduct                       POST        Add product to cart
@@ -64,7 +63,7 @@ use crate::error::{ContinenteError, Result};
 // The wishlist is session-scoped — always empty without a logged-in session.
 // AddProduct returns 302 (redirect to login). Not useful without OIDC auth flow.
 //
-// --- Pages & Content (not implemented) ---
+// --- Pages & Content (website internals — not useful for CLI) ---
 // Page-IncludeHeaderMenuAjax            GET  HTML   Header menu
 // Page-ManagerDecisionBanner            GET  HTML   Banner management
 // Page-ManagerDecisionSponsored         GET  HTML   Sponsored placements
@@ -76,7 +75,7 @@ use crate::error::{ContinenteError, Result};
 // (rbzns/winsocks JS challenge). Blocked for programmatic access. Kevel ad platform
 // handles sponsored product placement server-side.
 //
-// --- Consent & Other (not implemented) ---
+// --- Consent & Other (website internals) ---
 // Consent-ConsentData                   GET  JSON   Cookie consent data
 // ConsentTracking-GetContent            GET  HTML   Consent tracking content
 // ConsentTracking-SetSession            POST        Set consent session
