@@ -9,5 +9,5 @@ pub async fn run(
     output_format: OutputFormat,
 ) -> Result<String> {
     let result = client.suggest(query).await?;
-    Ok(format::format_suggestions(&result, output_format))
+    format::format_suggestions(&result, output_format)
 }

@@ -13,6 +13,13 @@ pub async fn run(
     sort: Option<SortRule>,
     output_format: OutputFormat,
 ) -> Result<String> {
+    if page == 0 {
+        bail!("Page number must be at least 1");
+    }
+    if max == 0 {
+        bail!("Maximum results must be at least 1");
+    }
+
     let cgid = categories::resolve_cgid(category).unwrap_or(category);
 
     let params = SearchParams {
@@ -25,7 +32,7 @@ pub async fn run(
     let response = client.browse(cgid, &params).await;
 
     match response {
-        Ok(r) => Ok(format::format_products(&r, page, max, output_format)),
+        Ok(r) => format::format_products(&r, page, max, output_format),
         Err(crate::error::ContinenteError::NoResults) => {
             bail!(
                 "No products found in category '{category}'. Use 'cnt categories' to see available categories."

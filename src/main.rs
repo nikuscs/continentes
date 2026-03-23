@@ -40,11 +40,11 @@ enum Commands {
         query: String,
 
         /// Maximum results
-        #[arg(long, default_value = "24")]
+        #[arg(long, default_value = "24", value_parser = clap::value_parser!(u32).range(1..))]
         max: u32,
 
         /// Page number (1-indexed)
-        #[arg(long, default_value = "1")]
+        #[arg(long, default_value = "1", value_parser = clap::value_parser!(u32).range(1..))]
         page: u32,
 
         /// Sort order
@@ -106,11 +106,11 @@ enum Commands {
         category: String,
 
         /// Maximum results
-        #[arg(long, default_value = "24")]
+        #[arg(long, default_value = "24", value_parser = clap::value_parser!(u32).range(1..))]
         max: u32,
 
         /// Page number (1-indexed)
-        #[arg(long, default_value = "1")]
+        #[arg(long, default_value = "1", value_parser = clap::value_parser!(u32).range(1..))]
         page: u32,
 
         /// Sort order
@@ -129,7 +129,7 @@ enum Commands {
     #[command(alias = "st")]
     Stores {
         /// Latitude
-        #[arg(long)]
+        #[arg(long, allow_hyphen_values = true)]
         lat: f64,
 
         /// Longitude
@@ -253,7 +253,7 @@ async fn main() -> Result<()> {
             commands::stores::run(&client, lat, lon, radius, output_format).await?
         }
 
-        Commands::Categories => commands::categories::run(output_format),
+        Commands::Categories => commands::categories::run(output_format)?,
 
         Commands::Flyers => commands::flyers::run(&client, output_format).await?,
     };

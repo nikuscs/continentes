@@ -42,6 +42,40 @@ fn explicit_missing_config_exits_nonzero() {
 }
 
 #[test]
+fn search_rejects_page_zero() {
+    cnt()
+        .args(["search", "leite", "--page", "0"])
+        .assert()
+        .failure();
+}
+
+#[test]
+fn search_rejects_max_zero() {
+    cnt()
+        .args(["search", "leite", "--max", "0"])
+        .assert()
+        .failure();
+}
+
+#[test]
+fn browse_rejects_page_zero() {
+    cnt()
+        .args(["browse", "frescos", "--page", "0"])
+        .assert()
+        .failure();
+}
+
+#[test]
+fn stores_accepts_negative_latitude() {
+    cnt()
+        .args([
+            "stores", "--lat", "-38.7", "--lon", "-9.1", "--radius", "10", "--format", "compact",
+        ])
+        .assert()
+        .success();
+}
+
+#[test]
 fn config_file_sets_default_output_format() {
     let mut f = tempfile::NamedTempFile::new().unwrap();
     write!(f, "[output]\nformat = \"json\"\n").unwrap();

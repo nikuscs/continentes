@@ -140,3 +140,22 @@ fn parse_flyers_tile_without_link_is_skipped() {
     assert_eq!(flyers.len(), 1);
     assert_eq!(flyers[0].title, "Valid");
 }
+
+#[test]
+fn parse_flyers_tile_without_href_is_skipped() {
+    let html = r#"
+    <div class="ipaper-tile">
+        <a class="ipaper-tile--image-link"></a>
+        <div class="ipaper-tile--title">Missing href</div>
+    </div>
+    <div class="ipaper-tile">
+        <a class="ipaper-tile--image-link" href="https://folhetos.continente.pt/valid/">
+        </a>
+        <div class="ipaper-tile--title">Valid</div>
+        <div class="ipaper-tile--description">dates</div>
+    </div>
+    "#;
+    let flyers = parse_flyers(html).unwrap();
+    assert_eq!(flyers.len(), 1);
+    assert_eq!(flyers[0].title, "Valid");
+}

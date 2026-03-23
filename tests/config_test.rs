@@ -1,6 +1,8 @@
 use std::io::Write as _;
 
-use continente::config::{Config, load_config, try_load};
+use continente::config::{
+    Config, load_config, load_config_from_paths, try_load, user_config_path_from,
+};
 use continente::format::OutputFormat;
 
 #[test]
@@ -108,5 +110,60 @@ fn try_load_invalid_file_returns_error() {
     write!(f, "[output\nformat = json").unwrap();
 
     let result = try_load(f.path());
+    assert!(result.is_err());
+}
+
+#[test]
+fn user_config_path_prefers_xdg_config_home() {
+    let path = user_config_path_from(Some("/tmp/xdg-home".as_ref()), Some("/tmp/home".as_ref()));
+    assert_eq!(
+        path.unwrap(),
+        std::path::Path::new("/tmp/xdg-home/continente/continente.toml")
+    );
+}
+
+#[test]
+fn user_config_path_falls_back_to_home_dot_config() {
+    let path = user_config_path_from(None, Some("/tmp/home".as_ref()));
+    assert_eq!(
+        path.unwrap(),
+        std::path::Path::new("/tmp/home/.config/continente/continente.toml")
+    );
+}
+
+#[test]
+fn load_config_from_paths_uses_local_file_when_present() {
+    let dir = tempfile::TempDir::new().unwrap();
+    let local = dir.path().join("continente.toml");
+    std::fs::write(&local, "[output]\nformat = \"compact\"\n").unwrap();
+
+    let cfg = load_config_from_paths(&local, None).unwrap();
+    assert_eq!(cfg.output.format, OutputFormat::Compact);
+}
+
+#[test]
+fn load_config_from_paths_uses_user_file_when_local_missing() {
+    let dir = tempfile::TempDir::new().unwrap();
+    let user = dir.path().join("user.toml");
+    std::fs::write(&user, "[output]\nformat = \"json\"\n").unwrap();
+
+    let cfg = load_config_from_paths(&dir.path().join("missing.toml"), Some(&user)).unwrap();
+    assert_eq!(cfg.output.format, OutputFormat::Json);
+}
+
+#[test]
+fn load_config_from_paths_ignores_invalid_user_file_and_uses_defaults() {
+    let dir = tempfile::TempDir::new().unwrap();
+    let user = dir.path().join("user.toml");
+    std::fs::write(&user, "not [ valid toml").unwrap();
+
+    let cfg = load_config_from_paths(&dir.path().join("missing.toml"), Some(&user)).unwrap();
+    assert_eq!(cfg.output.format, OutputFormat::Table);
+}
+
+#[test]
+fn try_load_propagates_non_not_found_errors() {
+    let dir = tempfile::TempDir::new().unwrap();
+    let result = try_load(dir.path());
     assert!(result.is_err());
 }

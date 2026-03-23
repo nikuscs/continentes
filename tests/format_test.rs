@@ -91,14 +91,14 @@ fn output_format_from_str_and_display() {
 
 #[test]
 fn format_products_table_uses_euro_and_truncates() {
-    let output = format_products(&sample_search_response(), 1, 24, OutputFormat::Table);
+    let output = format_products(&sample_search_response(), 1, 24, OutputFormat::Table).unwrap();
     assert!(output.contains("0.86€"));
     assert!(output.contains("…"));
 }
 
 #[test]
 fn format_products_json_is_valid() {
-    let output = format_products(&sample_search_response(), 1, 24, OutputFormat::Json);
+    let output = format_products(&sample_search_response(), 1, 24, OutputFormat::Json).unwrap();
     let parsed: serde_json::Value = serde_json::from_str(&output).unwrap();
     assert_eq!(parsed["query"], "leite");
     assert_eq!(parsed["products"][0]["id"], "6879912");
@@ -106,8 +106,14 @@ fn format_products_json_is_valid() {
 
 #[test]
 fn format_products_compact_is_tab_separated() {
-    let output = format_products(&sample_search_response(), 1, 24, OutputFormat::Compact);
+    let output = format_products(&sample_search_response(), 1, 24, OutputFormat::Compact).unwrap();
     assert!(output.contains("6879912\t0.86\tContinente\t"));
+}
+
+#[test]
+fn format_products_table_handles_zero_size_without_panicking() {
+    let output = format_products(&sample_search_response(), 1, 0, OutputFormat::Table).unwrap();
+    assert!(output.contains("Page 1/0"));
 }
 
 #[test]
@@ -120,10 +126,10 @@ fn format_product_detail_shows_promotion_and_nutrition() {
         storage_instructions: None,
         net_content: None,
         net_content_uom: None,
-        net_weight: None,
+        net_weight: Some("1 kg".to_string()),
         producer_name: None,
         producer_address: None,
-        preparation_instructions: None,
+        preparation_instructions: Some("Servir fresco".to_string()),
         daily_value_intake_reference: None,
         serving_size: None,
         serving_size_uom: None,
@@ -138,10 +144,21 @@ fn format_product_detail_shows_promotion_and_nutrition() {
         &sample_product_detail(),
         Some(&nutrition),
         OutputFormat::Table,
-    );
+    )
+    .unwrap();
     assert!(output.contains("was 1.00€"));
     assert!(output.contains("Nutritional Info"));
     assert!(output.contains("Proteína"));
+    assert!(output.contains("Net Weight:"));
+    assert!(output.contains("Preparation:"));
+}
+
+#[test]
+fn format_product_detail_json_without_nutrition_is_valid() {
+    let output = format_product_detail(&sample_product_detail(), None, OutputFormat::Json).unwrap();
+    let parsed: serde_json::Value = serde_json::from_str(&output).unwrap();
+    assert_eq!(parsed["id"], "6879912");
+    assert!(parsed.get("nutrition").is_none());
 }
 
 #[test]
@@ -160,14 +177,14 @@ fn format_stores_table_shows_pickup() {
         is_galp_store: false,
     }];
 
-    let output = format_stores(&stores, 10, OutputFormat::Table);
+    let output = format_stores(&stores, 10, OutputFormat::Table).unwrap();
     assert!(output.contains("Continente Colombo"));
     assert!(output.contains("Yes"));
 }
 
 #[test]
 fn format_categories_tree_contains_known_category() {
-    let output = format_categories(all_categories(), OutputFormat::Table);
+    let output = format_categories(all_categories(), OutputFormat::Table).unwrap();
     assert!(output.contains("Frescos (frescos)"));
     assert!(output.contains("Leite (laticinios-leite)"));
 }
@@ -180,7 +197,7 @@ fn format_suggestions_json_is_valid() {
         popular_terms: vec!["leite magro".to_string()],
     };
 
-    let output = format_suggestions(&suggestions, OutputFormat::Json);
+    let output = format_suggestions(&suggestions, OutputFormat::Json).unwrap();
     let parsed: serde_json::Value = serde_json::from_str(&output).unwrap();
     assert_eq!(parsed["popular_terms"][0], "leite magro");
 }
@@ -206,7 +223,7 @@ fn sample_flyers() -> Vec<Flyer> {
 
 #[test]
 fn format_flyers_table_shows_titles() {
-    let output = format_flyers(&sample_flyers(), OutputFormat::Table);
+    let output = format_flyers(&sample_flyers(), OutputFormat::Table).unwrap();
     assert!(output.contains("Folheto Semanal"));
     assert!(output.contains("Fim de Semana"));
     assert!(output.contains("semanal-12-jeu9"));
@@ -215,7 +232,7 @@ fn format_flyers_table_shows_titles() {
 
 #[test]
 fn format_flyers_json_is_valid() {
-    let output = format_flyers(&sample_flyers(), OutputFormat::Json);
+    let output = format_flyers(&sample_flyers(), OutputFormat::Json).unwrap();
     let parsed: serde_json::Value = serde_json::from_str(&output).unwrap();
     assert!(parsed.is_array());
     assert_eq!(parsed.as_array().unwrap().len(), 2);
@@ -224,7 +241,7 @@ fn format_flyers_json_is_valid() {
 
 #[test]
 fn format_flyers_compact_tsv() {
-    let output = format_flyers(&sample_flyers(), OutputFormat::Compact);
+    let output = format_flyers(&sample_flyers(), OutputFormat::Compact).unwrap();
     assert!(output.contains("semanal-12-jeu9\tFolheto Semanal\t"));
     assert!(output.contains("fim-de-semana-s12\tFim de Semana\t"));
 }

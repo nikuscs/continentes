@@ -1,3 +1,4 @@
+use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
 
 use serde::Deserialize;
@@ -45,7 +46,25 @@ impl Default for OutputConfig {
 }
 
 fn user_config_path() -> Option<PathBuf> {
-    std::env::var_os("HOME").map(PathBuf::from).map(|home| {
+    user_config_path_from(
+        std::env::var_os("XDG_CONFIG_HOME").as_deref(),
+        std::env::var_os("HOME").as_deref(),
+    )
+}
+
+pub fn user_config_path_from(
+    xdg_config_home: Option<&OsStr>,
+    home: Option<&OsStr>,
+) -> Option<PathBuf> {
+    if let Some(config_home) = xdg_config_home {
+        return Some(
+            PathBuf::from(config_home)
+                .join("continente")
+                .join("continente.toml"),
+        );
+    }
+
+    home.map(PathBuf::from).map(|home| {
         home.join(".config")
             .join("continente")
             .join("continente.toml")
@@ -73,16 +92,22 @@ pub fn load_config(explicit_path: Option<&Path>) -> anyhow::Result<Config> {
         };
     }
 
-    let local = Path::new("continente.toml");
-    match try_load(local) {
+    load_config_from_paths(Path::new("continente.toml"), user_config_path().as_deref())
+}
+
+pub fn load_config_from_paths(
+    local_path: &Path,
+    user_path: Option<&Path>,
+) -> anyhow::Result<Config> {
+    match try_load(local_path) {
         Ok(Some(config)) => return Ok(config),
         Ok(None) => {}
-        Err(e) => warn!("Failed to parse {}: {e}", local.display()),
+        Err(e) => warn!("Failed to parse {}: {e}", local_path.display()),
     }
 
-    if let Some(user_path) = user_config_path() {
+    if let Some(user_path) = user_path {
         debug!("Checking user config path {}", user_path.display());
-        match try_load(&user_path) {
+        match try_load(user_path) {
             Ok(Some(config)) => return Ok(config),
             Ok(None) => {}
             Err(e) => warn!("Failed to parse {}: {e}", user_path.display()),

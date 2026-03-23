@@ -1,6 +1,8 @@
 use std::fmt::{self, Write};
 use std::str::FromStr;
 
+use anyhow::Result;
+
 use crate::api::models::{
     Flyer, NutritionalInfo, ProductDetail, SearchResponse, Store, SuggestionResult,
 };
@@ -55,11 +57,11 @@ pub fn format_products(
     page: u32,
     size: u32,
     format: OutputFormat,
-) -> String {
+) -> Result<String> {
     match format {
-        OutputFormat::Table => format_products_table(response, page, size),
-        OutputFormat::Json => serde_json::to_string_pretty(response).unwrap_or_default(),
-        OutputFormat::Compact => format_products_compact(response),
+        OutputFormat::Table => Ok(format_products_table(response, page, size)),
+        OutputFormat::Json => Ok(serde_json::to_string_pretty(response)?),
+        OutputFormat::Compact => Ok(format_products_compact(response)),
     }
 }
 
@@ -90,7 +92,11 @@ fn format_products_table(response: &SearchResponse, page: u32, size: u32) -> Str
         );
     }
 
-    let total_pages = response.total.div_ceil(size);
+    let total_pages = if size == 0 {
+        0
+    } else {
+        response.total.div_ceil(size)
+    };
     let shown = response.products.len() as u32;
     let _ = writeln!(
         out,
@@ -114,30 +120,27 @@ pub fn format_product_detail(
     product: &ProductDetail,
     nutrition: Option<&NutritionalInfo>,
     format: OutputFormat,
-) -> String {
+) -> Result<String> {
     match format {
-        OutputFormat::Table => format_product_table(product, nutrition),
+        OutputFormat::Table => Ok(format_product_table(product, nutrition)),
         OutputFormat::Json => nutrition.map_or_else(
-            || serde_json::to_string_pretty(product).unwrap_or_default(),
+            || serde_json::to_string_pretty(product).map_err(Into::into),
             |info| {
                 #[derive(serde::Serialize)]
                 struct Combined<'a> {
                     product: &'a ProductDetail,
                     nutrition: &'a NutritionalInfo,
                 }
-                serde_json::to_string_pretty(&Combined {
+                Ok(serde_json::to_string_pretty(&Combined {
                     product,
                     nutrition: info,
-                })
-                .unwrap_or_default()
+                })?)
             },
         ),
-        OutputFormat::Compact => {
-            format!(
-                "{}\t{:.2}\t{}\t{}",
-                product.id, product.price.sales_value, product.brand, product.name
-            )
-        }
+        OutputFormat::Compact => Ok(format!(
+            "{}\t{:.2}\t{}\t{}",
+            product.id, product.price.sales_value, product.brand, product.name
+        )),
     }
 }
 
@@ -267,17 +270,17 @@ fn format_nutrition(info: &NutritionalInfo) -> String {
 
 // --- Suggestions ---
 
-pub fn format_suggestions(result: &SuggestionResult, format: OutputFormat) -> String {
+pub fn format_suggestions(result: &SuggestionResult, format: OutputFormat) -> Result<String> {
     match format {
-        OutputFormat::Json => serde_json::to_string_pretty(result).unwrap_or_default(),
-        OutputFormat::Table => format_suggestions_table(result),
-        OutputFormat::Compact => {
+        OutputFormat::Json => Ok(serde_json::to_string_pretty(result)?),
+        OutputFormat::Table => Ok(format_suggestions_table(result)),
+        OutputFormat::Compact => Ok({
             let mut out = String::new();
             for p in &result.products {
                 let _ = writeln!(out, "{}\t{:.2}\t{}\t{}", p.id, p.price, p.brand, p.name);
             }
             out
-        }
+        }),
     }
 }
 
@@ -310,17 +313,17 @@ fn format_suggestions_table(result: &SuggestionResult) -> String {
 
 // --- Stores ---
 
-pub fn format_stores(stores: &[Store], radius: u32, format: OutputFormat) -> String {
+pub fn format_stores(stores: &[Store], radius: u32, format: OutputFormat) -> Result<String> {
     match format {
-        OutputFormat::Json => serde_json::to_string_pretty(stores).unwrap_or_default(),
-        OutputFormat::Table => format_stores_table(stores, radius),
-        OutputFormat::Compact => {
+        OutputFormat::Json => Ok(serde_json::to_string_pretty(stores)?),
+        OutputFormat::Table => Ok(format_stores_table(stores, radius)),
+        OutputFormat::Compact => Ok({
             let mut out = String::new();
             for s in stores {
                 let _ = writeln!(out, "{}\t{}\t{}\t{}", s.id, s.name, s.city, s.address);
             }
             out
-        }
+        }),
     }
 }
 
@@ -350,7 +353,7 @@ fn format_stores_table(stores: &[Store], radius: u32) -> String {
 
 // --- Categories ---
 
-pub fn format_categories(categories: &[Category], format: OutputFormat) -> String {
+pub fn format_categories(categories: &[Category], format: OutputFormat) -> Result<String> {
     match format {
         OutputFormat::Json => {
             #[derive(serde::Serialize)]
@@ -367,16 +370,16 @@ pub fn format_categories(categories: &[Category], format: OutputFormat) -> Strin
                     parent: c.parent,
                 })
                 .collect();
-            serde_json::to_string_pretty(&cats).unwrap_or_default()
+            Ok(serde_json::to_string_pretty(&cats)?)
         }
-        OutputFormat::Table => format_categories_tree(categories),
-        OutputFormat::Compact => {
+        OutputFormat::Table => Ok(format_categories_tree(categories)),
+        OutputFormat::Compact => Ok({
             let mut out = String::new();
             for c in categories {
                 let _ = writeln!(out, "{}\t{}", c.cgid, c.name);
             }
             out
-        }
+        }),
     }
 }
 
@@ -411,17 +414,17 @@ fn format_categories_tree(categories: &[Category]) -> String {
 
 // --- Flyers ---
 
-pub fn format_flyers(flyers: &[Flyer], format: OutputFormat) -> String {
+pub fn format_flyers(flyers: &[Flyer], format: OutputFormat) -> Result<String> {
     match format {
-        OutputFormat::Json => serde_json::to_string_pretty(flyers).unwrap_or_default(),
-        OutputFormat::Table => format_flyers_table(flyers),
-        OutputFormat::Compact => {
+        OutputFormat::Json => Ok(serde_json::to_string_pretty(flyers)?),
+        OutputFormat::Table => Ok(format_flyers_table(flyers)),
+        OutputFormat::Compact => Ok({
             let mut out = String::new();
             for f in flyers {
                 let _ = writeln!(out, "{}\t{}\t{}", f.slug, f.title, f.url);
             }
             out
-        }
+        }),
     }
 }
 

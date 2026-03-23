@@ -342,3 +342,31 @@ async fn client_handles_empty_search_results() {
 
     assert!(result.is_err());
 }
+
+#[tokio::test]
+async fn flyers_returns_parsed_list() {
+    let server = MockServer::start().await;
+
+    Mock::given(method("GET"))
+        .and(path("/folhetos/"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(
+            r#"
+            <div class="ipaper-tile">
+                <a class="ipaper-tile--image-link" href="https://folhetos.continente.pt/semanal-12-jeu9/"></a>
+                <div class="ipaper-tile--title">Folheto Semanal</div>
+                <div class="ipaper-tile--description">18 mar - 24 mar</div>
+                <img data-src="https://b-cdn.ipaper.io/cover.jpg" />
+            </div>
+            "#,
+        ))
+        .mount(&server)
+        .await;
+
+    let client = test_client(&server.uri());
+    let result = client.flyers().await;
+
+    assert!(result.is_ok(), "Flyers failed: {result:?}");
+    let flyers = result.unwrap();
+    assert_eq!(flyers.len(), 1);
+    assert_eq!(flyers[0].slug, "semanal-12-jeu9");
+}

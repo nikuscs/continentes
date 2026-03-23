@@ -288,16 +288,17 @@ fn format_functions_cover_remaining_match_arms() {
         popular_terms: vec!["leite magro".to_string()],
     };
 
-    let search_json = format_products(&search, 1, 24, OutputFormat::Json);
-    let search_compact = format_products(&search, 1, 24, OutputFormat::Compact);
-    let detail_json = format_product_detail(&product, Some(&nutrition), OutputFormat::Json);
-    let detail_compact = format_product_detail(&product, None, OutputFormat::Compact);
-    let stores_json = format_stores(&stores, 10, OutputFormat::Json);
-    let stores_compact = format_stores(&stores, 10, OutputFormat::Compact);
-    let categories_json = format_categories(categories, OutputFormat::Json);
-    let categories_compact = format_categories(categories, OutputFormat::Compact);
-    let suggestions_table = format_suggestions(&suggestions, OutputFormat::Table);
-    let suggestions_compact = format_suggestions(&suggestions, OutputFormat::Compact);
+    let search_json = format_products(&search, 1, 24, OutputFormat::Json).unwrap();
+    let search_compact = format_products(&search, 1, 24, OutputFormat::Compact).unwrap();
+    let detail_json =
+        format_product_detail(&product, Some(&nutrition), OutputFormat::Json).unwrap();
+    let detail_compact = format_product_detail(&product, None, OutputFormat::Compact).unwrap();
+    let stores_json = format_stores(&stores, 10, OutputFormat::Json).unwrap();
+    let stores_compact = format_stores(&stores, 10, OutputFormat::Compact).unwrap();
+    let categories_json = format_categories(categories, OutputFormat::Json).unwrap();
+    let categories_compact = format_categories(categories, OutputFormat::Compact).unwrap();
+    let suggestions_table = format_suggestions(&suggestions, OutputFormat::Table).unwrap();
+    let suggestions_compact = format_suggestions(&suggestions, OutputFormat::Compact).unwrap();
 
     assert!(search_json.contains("\"leite\""));
     assert!(search_compact.contains("6879912\t0.86\tContinente"));

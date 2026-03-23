@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{Result, bail};
 
 use crate::api::client::ContinenteClient;
 use crate::api::models::{SearchParams, SortRule};
@@ -17,6 +17,13 @@ pub async fn run(
     filters: Vec<(String, String)>,
     output_format: OutputFormat,
 ) -> Result<String> {
+    if page == 0 {
+        bail!("Page number must be at least 1");
+    }
+    if max == 0 {
+        bail!("Maximum results must be at least 1");
+    }
+
     let params = SearchParams {
         start: (page - 1) * max,
         size: max,
@@ -28,5 +35,5 @@ pub async fn run(
     };
 
     let response = client.search(query, &params).await?;
-    Ok(format::format_products(&response, page, max, output_format))
+    format::format_products(&response, page, max, output_format)
 }

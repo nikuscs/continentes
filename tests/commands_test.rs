@@ -1,6 +1,6 @@
 use continente::api::client::ContinenteClient;
 use continente::api::models::SortRule;
-use continente::commands::{browse, product, search, stores, suggest};
+use continente::commands::{browse, categories, flyers, product, search, stores, suggest};
 use continente::config::HttpConfig;
 use continente::format::OutputFormat;
 use wiremock::matchers::{method, path, query_param};
@@ -53,6 +53,56 @@ async fn search_run_builds_query_and_formats_output() {
 }
 
 #[tokio::test]
+async fn search_run_rejects_page_zero() {
+    let server = MockServer::start().await;
+
+    let result = search::run(
+        &client(&server),
+        "leite",
+        24,
+        0,
+        None,
+        None,
+        None,
+        None,
+        Vec::new(),
+        OutputFormat::Table,
+    )
+    .await;
+
+    assert!(result.is_err());
+    assert_eq!(
+        result.unwrap_err().to_string(),
+        "Page number must be at least 1"
+    );
+}
+
+#[tokio::test]
+async fn search_run_rejects_max_zero() {
+    let server = MockServer::start().await;
+
+    let result = search::run(
+        &client(&server),
+        "leite",
+        0,
+        1,
+        None,
+        None,
+        None,
+        None,
+        Vec::new(),
+        OutputFormat::Table,
+    )
+    .await;
+
+    assert!(result.is_err());
+    assert_eq!(
+        result.unwrap_err().to_string(),
+        "Maximum results must be at least 1"
+    );
+}
+
+#[tokio::test]
 async fn browse_run_resolves_category_name() {
     let server = MockServer::start().await;
 
@@ -83,6 +133,40 @@ async fn browse_run_resolves_category_name() {
 }
 
 #[tokio::test]
+async fn browse_run_rejects_page_zero() {
+    let server = MockServer::start().await;
+
+    let result = browse::run(
+        &client(&server),
+        "frescos",
+        24,
+        0,
+        None,
+        OutputFormat::Table,
+    )
+    .await;
+
+    assert!(result.is_err());
+    assert_eq!(
+        result.unwrap_err().to_string(),
+        "Page number must be at least 1"
+    );
+}
+
+#[tokio::test]
+async fn browse_run_rejects_max_zero() {
+    let server = MockServer::start().await;
+
+    let result = browse::run(&client(&server), "frescos", 0, 1, None, OutputFormat::Table).await;
+
+    assert!(result.is_err());
+    assert_eq!(
+        result.unwrap_err().to_string(),
+        "Maximum results must be at least 1"
+    );
+}
+
+#[tokio::test]
 async fn browse_run_propagates_no_results_error() {
     let server = MockServer::start().await;
 
@@ -90,6 +174,29 @@ async fn browse_run_propagates_no_results_error() {
         .and(path(format!("{SFCC_PATH}/Search-ShowAjax")))
         .and(query_param("cgid", "laticinios-leite"))
         .respond_with(ResponseTemplate::new(200).set_body_string("<html></html>"))
+        .mount(&server)
+        .await;
+
+    let result = browse::run(
+        &client(&server),
+        "laticinios-leite",
+        24,
+        1,
+        None,
+        OutputFormat::Table,
+    )
+    .await;
+
+    assert!(result.is_err());
+}
+
+#[tokio::test]
+async fn browse_run_propagates_non_no_results_errors() {
+    let server = MockServer::start().await;
+
+    Mock::given(method("GET"))
+        .and(path(format!("{SFCC_PATH}/Search-ShowAjax")))
+        .respond_with(ResponseTemplate::new(500))
         .mount(&server)
         .await;
 
@@ -126,6 +233,43 @@ async fn product_run_without_nutrition_returns_detail() {
 
     assert!(output.contains("Leite UHT Meio Gordo Continente"));
     assert!(!output.contains("Nutritional Info"));
+}
+
+#[tokio::test]
+async fn product_run_with_nutrition_errors_when_metadata_is_missing() {
+    let server = MockServer::start().await;
+
+    Mock::given(method("GET"))
+        .and(path(format!("{SFCC_PATH}/Product-Variation")))
+        .and(query_param("pid", "6879912"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(
+            r#"{
+                "product": {
+                    "id": "6879912",
+                    "productName": "Leite UHT Meio Gordo Continente",
+                    "brand": "Continente",
+                    "available": true,
+                    "online": true,
+                    "price": {
+                        "sales": {
+                            "value": 0.86,
+                            "currency": "EUR",
+                            "formatted": "0,86 €"
+                        }
+                    }
+                }
+            }"#,
+        ))
+        .mount(&server)
+        .await;
+
+    let result = product::run(&client(&server), "6879912", true, OutputFormat::Table).await;
+
+    assert!(result.is_err());
+    assert_eq!(
+        result.unwrap_err().to_string(),
+        "Nutritional info is not available for product '6879912'"
+    );
 }
 
 #[tokio::test]
@@ -218,4 +362,36 @@ async fn suggest_run_rejects_short_query() {
     let server = MockServer::start().await;
     let result = suggest::run(&client(&server), "lei", OutputFormat::Table).await;
     assert!(result.is_err());
+}
+
+#[tokio::test]
+async fn flyers_run_formats_results() {
+    let server = MockServer::start().await;
+
+    Mock::given(method("GET"))
+        .and(path("/folhetos/"))
+        .respond_with(ResponseTemplate::new(200).set_body_string(
+            r#"
+            <div class="ipaper-tile">
+                <a class="ipaper-tile--image-link" href="https://folhetos.continente.pt/semanal-12-jeu9/"></a>
+                <div class="ipaper-tile--title">Folheto Semanal</div>
+                <div class="ipaper-tile--description">18 mar - 24 mar</div>
+                <img data-src="https://b-cdn.ipaper.io/cover.jpg" />
+            </div>
+            "#,
+        ))
+        .mount(&server)
+        .await;
+
+    let output = flyers::run(&client(&server), OutputFormat::Compact)
+        .await
+        .unwrap();
+
+    assert!(output.contains("semanal-12-jeu9\tFolheto Semanal\t"));
+}
+
+#[test]
+fn categories_run_formats_results() {
+    let output = categories::run(OutputFormat::Compact).unwrap();
+    assert!(output.contains("frescos\tFrescos"));
 }

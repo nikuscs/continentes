@@ -17,6 +17,11 @@ fn resolve_cgid_partial_match() {
 }
 
 #[test]
+fn resolve_cgid_partial_name_match_returns_cgid() {
+    assert_eq!(resolve_cgid("iogur"), Some("laticinios-iogurtes"));
+}
+
+#[test]
 fn resolve_cgid_unknown_returns_none() {
     assert_eq!(resolve_cgid("nonexistent"), None);
 }

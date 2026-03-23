@@ -53,9 +53,10 @@ fn extract_products(document: &Html) -> Vec<SearchProduct> {
     let mut products = Vec::new();
 
     for element in document.select(&tile_selector) {
-        let Some(raw_json) = element.value().attr("data-product-tile-impression") else {
-            continue;
-        };
+        let raw_json = element
+            .value()
+            .attr("data-product-tile-impression")
+            .expect("tile selector guarantees attribute");
 
         // The attribute value is HTML-encoded (e.g., &quot; instead of ")
         let decoded = html_decode(raw_json);

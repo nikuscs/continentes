@@ -11,5 +11,5 @@ pub async fn run(
     output_format: OutputFormat,
 ) -> Result<String> {
     let stores = client.stores(lat, lon, radius).await?;
-    Ok(format::format_stores(&stores, radius, output_format))
+    format::format_stores(&stores, radius, output_format)
 }

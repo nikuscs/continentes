@@ -61,6 +61,7 @@ fn suggest_short_query_fails_before_network() {
 }
 
 #[test]
+#[ignore = "requires network"]
 fn search_dispatches_to_real_endpoint() {
     let assert = cnt()
         .args(["search", "leite", "--max", "1", "--format", "compact"])
@@ -73,6 +74,7 @@ fn search_dispatches_to_real_endpoint() {
 }
 
 #[test]
+#[ignore = "requires network"]
 fn product_dispatches_to_real_endpoint() {
     let assert = cnt()
         .args(["product", "6879912", "--format", "compact"])
@@ -85,6 +87,7 @@ fn product_dispatches_to_real_endpoint() {
 }
 
 #[test]
+#[ignore = "requires network"]
 fn browse_dispatches_to_real_endpoint() {
     let assert = cnt()
         .args(["browse", "frescos", "--max", "1", "--format", "compact"])
@@ -97,6 +100,7 @@ fn browse_dispatches_to_real_endpoint() {
 }
 
 #[test]
+#[ignore = "requires network"]
 fn stores_dispatches_to_real_endpoint() {
     let assert = cnt()
         .args([
@@ -111,6 +115,7 @@ fn stores_dispatches_to_real_endpoint() {
 }
 
 #[test]
+#[ignore = "requires network"]
 fn suggest_dispatches_to_real_endpoint() {
     let assert = cnt()
         .args(["suggest", "leite", "--format", "compact"])

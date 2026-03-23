@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use anyhow::{Context, Result, bail};
 
 use crate::api::client::ContinenteClient;
 use crate::format::{self, OutputFormat};
@@ -22,15 +22,11 @@ pub async fn run(
                 .context("Failed to fetch nutritional info")?;
             Some(info)
         } else {
-            None
+            bail!("Nutritional info is not available for product '{pid}'")
         }
     } else {
         None
     };
 
-    Ok(format::format_product_detail(
-        &product,
-        nutrition.as_ref(),
-        output_format,
-    ))
+    format::format_product_detail(&product, nutrition.as_ref(), output_format)
 }
