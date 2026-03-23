@@ -3,11 +3,11 @@ name = "continente"
 version = "0.1.0"
 edition = "2024"
 rust-version = "1.85"
-description = "Fast CLI for browsing Continente supermarket products, prices, nutrition, categories, and stores"
+description = "Fast CLI for browsing Continente online supermarket products, prices, nutrition, categories, and stores — LLM-ready, works with Claude Code, Codex, and AI agents"
 license = "MIT"
 repository = "https://github.com/nikuscs/continentes"
 readme = "README.md"
-keywords = ["continente", "supermarket", "cli", "shopping", "rust"]
+keywords = ["continente", "supermarket", "cli", "ai-agent", "llm"]
 categories = ["command-line-utilities"]
 
 [[bin]]

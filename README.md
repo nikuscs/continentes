@@ -4,7 +4,7 @@
 [![Release](https://github.com/nikuscs/continentes/actions/workflows/release.yml/badge.svg)](https://github.com/nikuscs/continentes/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**Fast CLI for browsing [Continente](https://www.continente.pt) supermarket products. Search products, compare prices, inspect nutritional info, browse categories, and find nearby stores from the terminal.**
+**Fast CLI for browsing [Continente online](https://www.continente.pt) supermarket products, optimized for LLM consumption. Works as a skill for [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Claude.ai](https://claude.ai), [OpenAI Codex](https://openai.com/index/openai-codex/), and any AI agent. Search products, compare prices, inspect nutritional info, browse categories, and find nearby stores from the terminal.**
 
 > **Disclaimer:** This project is for **educational purposes and AI automation research only**.
 > The authors are not responsible for any misuse or for any damages resulting from the use of this tool.
