@@ -316,12 +316,16 @@ fn extract_ean_supplier(url: Option<&str>) -> (Option<String>, Option<String>) {
     let Some(url) = url else {
         return (None, None);
     };
-    let ean = url
+    // URL-decode first (e.g., %7c → |)
+    let decoded = urlencoding::decode(url).unwrap_or(std::borrow::Cow::Borrowed(url));
+    let ean = decoded
         .split("ean=")
         .nth(1)
         .and_then(|s| s.split('&').next())
+        // Multi-EAN products use | separator — take first EAN only
+        .and_then(|s| s.split('|').next())
         .map(String::from);
-    let supplier = url
+    let supplier = decoded
         .split("supplierid=")
         .nth(1)
         .and_then(|s| s.split('&').next())

@@ -1,6 +1,22 @@
 # cnt — Continente CLI
 
-A command-line tool for browsing [Continente](https://www.continente.pt) supermarket products.
+[![CI](https://github.com/nikuscs/continentes/actions/workflows/ci.yml/badge.svg)](https://github.com/nikuscs/continentes/actions/workflows/ci.yml)
+[![Release](https://github.com/nikuscs/continentes/actions/workflows/release.yml/badge.svg)](https://github.com/nikuscs/continentes/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
+A command-line tool for browsing [Continente](https://www.continente.pt) supermarket products. Search products, compare prices, check nutritional info, and find stores — all from the terminal.
+
+> **Disclaimer**: This project is for educational and personal use. It interacts with publicly accessible endpoints on continente.pt. Not affiliated with Continente or Sonae MC.
+
+## Features
+
+- Search 50,000+ products with brand, price, and dietary filters
+- Full product details with EAN/barcode, nutritional info, and allergens
+- Browse 91 product categories
+- Search autocomplete suggestions
+- Find 228 stores across Portugal with GPS coordinates
+- Multiple output formats: table, JSON, compact (TSV)
+- No authentication required
 
 ## Installation
 
@@ -20,70 +36,107 @@ Download from [Releases](https://github.com/nikuscs/continentes/releases):
 | Linux (x64) | `cnt-linux-x64.tar.gz` |
 | Linux (ARM64) | `cnt-linux-arm64.tar.gz` |
 
+```bash
+tar -xzf cnt-*.tar.gz && chmod +x cnt && sudo mv cnt /usr/local/bin/
+```
+
 ## Usage
 
 ### Search products
 
 ```bash
-cnt search "leite"
-cnt search "cerveja" --brand "Super Bock" --sort price-low-to-high
-cnt search "leite" --vegan --max 10
-cnt search "arroz" --price-min 1 --price-max 3
-cnt search "bolachas" --gluten-free --page 2
+cnt search "leite"                                    # basic search
+cnt search "cerveja" --brand "Super Bock"             # filter by brand
+cnt search "arroz" --price-min 1 --price-max 3        # price range
+cnt search "leite" --vegan --sort price-low-to-high   # dietary + sort
+cnt search "bolachas" --gluten-free --page 2          # paginate
 ```
 
 ### Product details
 
 ```bash
-cnt product 6879912
-cnt product 6879912 --nutrition
-cnt product 6879912 --format json
+cnt product 6879912                  # basic info
+cnt product 6879912 --nutrition      # include nutritional data
+```
+
+```
+Leite UHT Meio Gordo Continente
+===============================
+
+ID:           6879912
+Brand:        Continente
+Price:        0,86€
+Unit Price:   0,86€/lt
+Package:      emb. 1 lt
+Rating:       3.9
+Category:     Laticínios e Ovos > Leite > Leite Meio Gordo
+EAN:          5601312508007
+Badge:        Produzido em Portugal
 ```
 
 ### Browse categories
 
 ```bash
-cnt browse frescos
-cnt browse "leite" --max 10
-cnt browse laticinios-leite --sort price-low-to-high
+cnt browse frescos                     # by name (fuzzy match)
+cnt browse laticinios-leite            # by exact cgid
+cnt browse "cerveja" --sort unit-price  # with sorting
 ```
 
 ### Search suggestions
 
 ```bash
-cnt suggest "arroz"
-cnt suggest "leite"
+cnt suggest "arroz"     # autocomplete (min 5 chars)
 ```
 
 ### Find stores
 
 ```bash
-cnt stores --lat 38.7 --lon -9.1
-cnt stores --lat 41.1 --lon -8.6 --radius 20
+cnt stores --lat 38.7 --lon -9.1              # Lisbon area
+cnt stores --lat 41.1 --lon -8.6 --radius 20  # Porto, 20km
 ```
 
 ### List categories
 
 ```bash
-cnt categories
-cnt categories --format json
+cnt categories            # tree view
+cnt categories --format json  # machine-readable
 ```
 
-## Output Formats
+## Output formats
 
-| Format | Flag | Description |
-|--------|------|-------------|
-| Table | `--format table` | Pretty tables (default) |
-| JSON | `--format json` | Machine-readable JSON |
-| Compact | `--format compact` | Tab-separated for piping |
+```bash
+cnt search "leite"                     # table (default)
+cnt search "leite" --format json       # JSON
+cnt search "leite" --format compact    # TSV for piping
+```
 
 ```bash
 # Pipe to jq
 cnt search "leite" --format json | jq '.products[].name'
 
 # Pipe to other tools
-cnt search "leite" --format compact | cut -f1,4
+cnt search "leite" --format compact | sort -t$'\t' -k2 -n
 ```
+
+## Dietary filters
+
+| Flag | Description |
+|------|-------------|
+| `--vegan` | Vegan products only |
+| `--gluten-free` | Gluten-free only |
+| `--lactose-free` | Lactose-free only |
+| `--bio` | Organic/biological only |
+
+## Sort options
+
+| Value | Description |
+|-------|-------------|
+| `relevance` | Default ranking |
+| `price-low-to-high` | Cheapest first |
+| `price-high-to-low` | Most expensive first |
+| `unit-price` | By price per unit (kg/lt) |
+| `name-asc` | Name A-Z |
+| `name-desc` | Name Z-A |
 
 ## Configuration
 
@@ -96,36 +149,22 @@ retries = 3
 delay_ms = 100
 
 [output]
-format = "table"
+format = "table"   # table, json, compact
 ```
 
-## Global Options
+## Global options
 
-| Flag | Description |
-|------|-------------|
-| `--format <FORMAT>` | Output format: table, json, compact |
-| `-v, --verbose` | Enable debug logging |
-| `--config <PATH>` | Config file path (env: `CONTINENTE_CONFIG`) |
+| Flag | Env var | Description |
+|------|---------|-------------|
+| `--format <FORMAT>` | | Output: table, json, compact |
+| `-v, --verbose` | | Debug logging |
+| `--config <PATH>` | `CONTINENTE_CONFIG` | Config file path |
 
-## Sort Options
+## How it works
 
-| Value | Description |
-|-------|-------------|
-| `relevance` | Default Continente ranking |
-| `price-low-to-high` | Cheapest first |
-| `price-high-to-low` | Most expensive first |
-| `unit-price` | By price per unit (kg/lt) |
-| `name-asc` | Alphabetical A-Z |
-| `name-desc` | Alphabetical Z-A |
+The CLI interacts with Continente's Salesforce Commerce Cloud (SFCC) storefront controllers. These are the same endpoints the website uses — no private APIs, no authentication, no scraping of rendered pages. Product data is extracted from structured `data-` attributes and JSON responses.
 
-## Dietary Filters
-
-| Flag | Description |
-|------|-------------|
-| `--vegan` | Vegan products |
-| `--gluten-free` | Gluten-free |
-| `--lactose-free` | Lactose-free |
-| `--bio` | Organic/biological |
+See [`docs/investigation.md`](docs/investigation.md) for the full reverse engineering investigation.
 
 ## License
 

@@ -7,24 +7,31 @@ on:
     branches: [main]
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ci-${{ github.ref }}
   cancel-in-progress: true
+
+permissions:
+  contents: read
 
 env:
   CARGO_TERM_COLOR: always
+  RUSTFLAGS: -Dwarnings
 
 jobs:
   check:
     name: Check
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
       - run: cargo check --all-targets
 
-  format:
+  fmt:
     name: Format
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -35,17 +42,21 @@ jobs:
   clippy:
     name: Clippy
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy
+      - uses: Swatinem/rust-cache@v2
       - run: cargo clippy --all-targets
 
   test:
     name: Test
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
       - run: cargo test
