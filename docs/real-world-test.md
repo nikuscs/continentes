@@ -38,11 +38,29 @@ cnt search "cerveja" --brand "Super Bock"
 - [ ] All results are Super Bock brand
 - [ ] Total count lower than unfiltered search
 
-### `search` — Price range
+### `search` — Price range (both)
 ```bash
 cnt search "arroz" --price-min 1 --price-max 3
 ```
 - [ ] All results between 1€ and 3€
+
+### `search` — Price min only
+```bash
+cnt search "arroz" --price-min 5 --max 3
+```
+- [ ] All results >= 5€
+
+### `search` — Price max only
+```bash
+cnt search "arroz" --price-max 1 --max 3
+```
+- [ ] All results <= 1€
+
+### `search` — Sort by relevance (explicit)
+```bash
+cnt search "leite" --sort relevance --max 3
+```
+- [ ] Returns results (same as default sort)
 
 ### `search` — Sort by price
 ```bash
@@ -462,7 +480,10 @@ CONTINENTE_CONFIG=/tmp/cnt_env.toml cnt categories | jq 'length'
 | search JSON | ✅ | Valid JSON, jq parses |
 | search compact | ✅ | Tab-separated, pipeable |
 | search brand filter | ✅ | 26 results for "cerveja" + Super Bock |
-| search price range | ✅ | 159 results for "arroz" 1-3€ |
+| search price range (both) | ✅ | 159 results for "arroz" 1-3€ |
+| search price-min only | ✅ | "arroz" >= 5€ returns expensive rice |
+| search price-max only | ✅ | "arroz" <= 1€ returns budget rice |
+| search sort relevance | ✅ | Explicit --sort relevance works |
 | search sort price low-to-high | ✅ | Cheapest first (0.59€) |
 | search sort price high-to-low | ✅ | Most expensive first (9472€ Macallan) |
 | search sort unit-price | ✅ | Works for "leite", 500 on some queries (API issue) |
