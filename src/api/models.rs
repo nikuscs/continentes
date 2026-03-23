@@ -94,14 +94,14 @@ pub struct ProductImages {
 // --- Serde intermediate structs for Product-Variation JSON ---
 
 #[derive(Debug, Deserialize)]
-pub(crate) struct ProductVariationResponse {
+pub struct ProductVariationResponse {
     pub product: RawProduct,
 }
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 #[allow(dead_code)]
-pub(crate) struct RawProduct {
+pub struct RawProduct {
     pub id: String,
     #[serde(default)]
     pub product_name: String,
@@ -140,7 +140,7 @@ pub(crate) struct RawProduct {
 }
 
 #[derive(Debug, Deserialize)]
-pub(crate) struct RawPrice {
+pub struct RawPrice {
     pub sales: Option<RawSales>,
     pub list: Option<RawSales>,
     #[serde(alias = "onlineTo")]
@@ -149,7 +149,7 @@ pub(crate) struct RawPrice {
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub(crate) struct RawSales {
+pub struct RawSales {
     pub value: f64,
     #[serde(default)]
     pub currency: String,
@@ -159,20 +159,20 @@ pub(crate) struct RawSales {
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
-pub(crate) struct RawPricePerUnit {
+pub struct RawPricePerUnit {
     pub primary_price: Option<RawPrimaryPrice>,
     pub secondary_price: Option<RawSecondaryPrice>,
 }
 
 #[derive(Debug, Deserialize)]
-pub(crate) struct RawPrimaryPrice {
+pub struct RawPrimaryPrice {
     pub price: Option<RawSales>,
     pub unit: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
 #[allow(dead_code)]
-pub(crate) struct RawSecondaryPrice {
+pub struct RawSecondaryPrice {
     pub price: Option<serde_json::Value>,
     pub unit: Option<String>,
     pub value: Option<String>,
@@ -181,7 +181,7 @@ pub(crate) struct RawSecondaryPrice {
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
 #[allow(clippy::struct_field_names)]
-pub(crate) struct RawCategory {
+pub struct RawCategory {
     #[serde(default)]
     pub primary_category_id: String,
     #[serde(default)]
@@ -193,23 +193,23 @@ pub(crate) struct RawCategory {
 }
 
 #[derive(Debug, Deserialize)]
-pub(crate) struct RawBadgeInfo {
+pub struct RawBadgeInfo {
     pub general: Option<RawBadge>,
     pub promo: Option<RawBadge>,
 }
 
 #[derive(Debug, Deserialize)]
-pub(crate) struct RawBadge {
+pub struct RawBadge {
     pub title: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
-pub(crate) struct RawImage {
+pub struct RawImage {
     pub url: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
-pub(crate) struct RawImageEntry {
+pub struct RawImageEntry {
     pub url: Option<String>,
 }
 
@@ -371,7 +371,7 @@ pub struct Store {
 }
 
 #[derive(Debug, Deserialize)]
-pub(crate) struct StoresResponse {
+pub struct StoresResponse {
     #[serde(default)]
     pub stores: Vec<Store>,
 }

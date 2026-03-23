@@ -1,0 +1,544 @@
+{
+  "action": "Product-Variation",
+  "queryString": "pid=6879912",
+  "locale": "default",
+  "product": {
+    "productRange": {
+      "count": 1,
+      "productSearchHits": {}
+    },
+    "deepestCommonCategory": {},
+    "uuid": "2d9bf3c61057f54f2671670a20",
+    "id": "6879912",
+    "productName": "Leite UHT Meio Gordo Continente",
+    "productType": "standard",
+    "brand": "Continente",
+    "bottomAssetsURL": "",
+    "price": {
+      "sales": {
+        "value": 0.86,
+        "currency": "EUR",
+        "formatted": "0,86€",
+        "decimalPrice": "0.86"
+      },
+      "list": null,
+      "onlineTo": null,
+      "isPriceRange": false,
+      "html": "    <div class=\"price js-product-price\">\n        \n\n\n<div class=\"prices-wrapper\">\n    \n        \n        \n        \n        \n\n        \n        <div class=\"list\">\n            \n            \n            \n            \n            \n            \n                \n            \n        </div>\n    \n    \n    \n\n\n\n    <span class=\"pwc-tile--price-primary\">\n        \n            0<span class=\"decimalPrice\">,86&euro;</span>\n        \n    </span>\n\n</div>\n\n<div class=\"pwc-tile--price-secondary\">\n    \n</div>\n\n<div class=\"pwc-tile--price-sdr\">\n    \n</div>\n\n\n\n\n    </div>\n\r\n"
+    },
+    "isOutOfRange": false,
+    "images": {
+      "large": [],
+      "small": []
+    },
+    "selectedQuantity": 6,
+    "minOrderQuantity": 6,
+    "maxOrderQuantity": 10,
+    "variationAttributes": null,
+    "longDescription": null,
+    "shortDescription": "Um delicioso leite meio gordo 100% português. Fonte natural de cálcio.",
+    "rating": 3.9,
+    "promotions": null,
+    "attributes": null,
+    "options": [],
+    "quantities": [
+      {
+        "value": "36",
+        "selected": false,
+        "url": "/on/demandware.store/Sites-continente-Site/default/Product-Variation?pid=6879912&quantity=36"
+      },
+      {
+        "value": "72",
+        "selected": false,
+        "url": "/on/demandware.store/Sites-continente-Site/default/Product-Variation?pid=6879912&quantity=72"
+      },
+      {
+        "value": "108",
+        "selected": false,
+        "url": "/on/demandware.store/Sites-continente-Site/default/Product-Variation?pid=6879912&quantity=108"
+      },
+      {
+        "value": "144",
+        "selected": false,
+        "url": "/on/demandware.store/Sites-continente-Site/default/Product-Variation?pid=6879912&quantity=144"
+      },
+      {
+        "value": "180",
+        "selected": false,
+        "url": "/on/demandware.store/Sites-continente-Site/default/Product-Variation?pid=6879912&quantity=180"
+      },
+      {
+        "value": "216",
+        "selected": false,
+        "url": "/on/demandware.store/Sites-continente-Site/default/Product-Variation?pid=6879912&quantity=216"
+      },
+      {
+        "value": "252",
+        "selected": false,
+        "url": "/on/demandware.store/Sites-continente-Site/default/Product-Variation?pid=6879912&quantity=252"
+      },
+      {
+        "value": "288",
+        "selected": false,
+        "url": "/on/demandware.store/Sites-continente-Site/default/Product-Variation?pid=6879912&quantity=288"
+      },
+      {
+        "value": "324",
+        "selected": false,
+        "url": "/on/demandware.store/Sites-continente-Site/default/Product-Variation?pid=6879912&quantity=324"
+      },
+      {
+        "value": "360",
+        "selected": false,
+        "url": "/on/demandware.store/Sites-continente-Site/default/Product-Variation?pid=6879912&quantity=360"
+      }
+    ],
+    "sizeChartId": null,
+    "selectedProductUrl": "/produto/leite-uht-meio-gordo-continente-continente-6879912.html?%2Fproduto%2Fleite-uht-meio-gordo-continente-continente-6879912.html=undefined&quantity=undefined",
+    "readyToOrder": true,
+    "online": true,
+    "pageTitle": null,
+    "pageDescription": null,
+    "pageKeywords": null,
+    "pageMetaTags": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
+    ],
+    "template": null,
+    "availableVariations": {},
+    "hasVariationsInStock": false,
+    "availability": {
+      "messages": [
+        "In Stock"
+      ],
+      "inStockDate": "Mon Mar 23 2026"
+    },
+    "available": true,
+    "badgeInfo": {
+      "promo": null,
+      "general": {
+        "img": "https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/-/Sites-continente-Library/default/dwaef5f134/images/badges/general/col/Badge_PT.png?sw=25&sh=25",
+        "title": "Produzido em Portugal",
+        "alt": "Crachá do produto",
+        "isIvaZero": false,
+        "ivaZeroMsg": null
+      },
+      "advertised": null,
+      "pictograms": [
+        {
+          "img": "https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/-/Sites-continente-Library/default/dwaef5f134/images/badges/general/col/Badge_PT.png?sw=24&sh=24",
+          "title": "Produzido em Portugal",
+          "alt": "Crachá do produto",
+          "key": "badge_pt"
+        }
+      ]
+    },
+    "pricePerUnit": {
+      "primaryPrice": {
+        "price": {
+          "value": 0.86,
+          "currency": "EUR",
+          "formatted": "0,86€",
+          "decimalPrice": "0.86"
+        },
+        "unit": "un"
+      },
+      "secondaryPrice": {
+        "price": "0,86€",
+        "unit": "lt",
+        "value": "0.86"
+      },
+      "shouldHideSecondaryPrice": false,
+      "shouldShowPrimaryPriceUnit": false
+    },
+    "measurementInfo": {
+      "quantityConversionRates": {
+        "hasConversionRate": false,
+        "hasAlternativeSaleUnit": false,
+        "unitConversionRate": 0,
+        "minOrderQuantity": 6,
+        "stepQuantity": 6,
+        "primaryunit": "un",
+        "secondaryunit": "lt",
+        "selectedunit": "primary",
+        "maxNumberOfUnitsPerSale": 90
+      }
+    },
+    "measurementNote": "emb. 1 lt",
+    "addToCartButtonText": "Carrinho",
+    "addToCartButtonTextNotAvailable": "Indisponível",
+    "buttonDisabled": false,
+    "category": {
+      "primaryCategoryId": "laticinios-leite-meio-gordo",
+      "primaryCategoryDisplayName": "Leite Meio Gordo",
+      "primaryCategoryTopLevelProductCategoryId": "laticinios",
+      "primaryCategoryTopLevelProductCategoryDisplayName": "Laticínios e Ovos",
+      "primaryCategoryTopLevelProductCategoryIcon": {}
+    },
+    "deliveryTime": null,
+    "deliveryTimeBadge": null,
+    "confirmationImage": {
+      "url": "https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/-/Sites-col-master-catalog/default/dw66d59f15/images/col/687/6879912-frente.jpg?sw=87&sh=80",
+      "fallbackimage": {
+        "url": "https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/Sites-continente-Site/-/default/dweb166559/images/noimagelarge_product.png?sw=87&sh=80",
+        "title": "Leite UHT Meio Gordo Continente",
+        "alt": "Leite UHT Meio Gordo Continente"
+      },
+      "title": "Leite UHT Meio Gordo Continente",
+      "alt": "Leite UHT Meio Gordo Continente"
+    },
+    "productTileImage": {
+      "url": "https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/-/Sites-col-master-catalog/default/dw66d59f15/images/col/687/6879912-frente.jpg?sw=280&sh=280",
+      "fallbackimage": {
+        "url": "https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/Sites-continente-Site/-/default/dweb166559/images/noimagelarge_product.png?sw=280&sh=280",
+        "title": "Leite UHT Meio Gordo Continente",
+        "alt": "Leite UHT Meio Gordo Continente"
+      },
+      "title": "Leite UHT Meio Gordo Continente",
+      "alt": "Leite UHT Meio Gordo Continente"
+    },
+    "disImage": {
+      "url": "https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/-/Sites-col-master-catalog/default/dw66d59f15/images/col/687/6879912-frente.jpg?sw=280&sh=280",
+      "fallbackimage": {
+        "url": "https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/Sites-continente-Site/-/default/dweb166559/images/noimagelarge_product.png?sw=280&sh=280",
+        "title": "Leite UHT Meio Gordo Continente",
+        "alt": "Leite UHT Meio Gordo Continente"
+      },
+      "title": "Leite UHT Meio Gordo Continente",
+      "alt": "Leite UHT Meio Gordo Continente"
+    },
+    "quickViewImages": [
+      {
+        "url": "https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/-/Sites-col-master-catalog/default/dw66d59f15/images/col/687/6879912-frente.jpg?sw=1000&sh=1000",
+        "title": "Leite UHT Meio Gordo Continente",
+        "alt": "Leite UHT Meio Gordo Continente"
+      }
+    ],
+    "pdpImages": [
+      {
+        "url": "https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/-/Sites-col-master-catalog/default/dw66d59f15/images/col/687/6879912-frente.jpg?sw=2000&sh=2000",
+        "title": "Leite UHT Meio Gordo Continente",
+        "alt": "Leite UHT Meio Gordo Continente"
+      }
+    ],
+    "confirmationDelayTime": 3000,
+    "productURL": "https://www.continente.pt/produto/leite-uht-meio-gordo-continente-continente-6879912.html",
+    "productRecommendations": [],
+    "productSDR": {
+      "isDeposit": false,
+      "hasDeposit": false,
+      "depositCode": "",
+      "despositValue": null
+    },
+    "customCanonicalURL": "",
+    "gtmCategoryPath": "Laticínios e Ovos/Leite/Leite Meio Gordo",
+    "productTabs": [
+      {
+        "title": "Sobre este Produto",
+        "productAttributes": [
+          "longDescription",
+          "food.Ingredients",
+          "food.Allergens",
+          "food.NutricionalInformation",
+          "food.Origin",
+          "food.FishingType",
+          "food.CaptureZone",
+          "food.Region",
+          "food.Milktype",
+          "food.TextureIntensity",
+          "food.Flavour",
+          "food.Appearance",
+          "food.GrapeVarieties",
+          "food.Alcoholcontent",
+          "food.SizeKg",
+          "food.SkinType",
+          "food.HairType",
+          "food.ProductType",
+          "food.CertificateCCL",
+          "food.Age",
+          "food.Colour",
+          "food.Finish",
+          "food.Coverage",
+          "food.ColourantType",
+          "food.ColourantNumber",
+          "food.Protectionfator",
+          "food.CompatibleRecharge",
+          "food.Fragance",
+          "non.food.Color",
+          "non.food.Size",
+          "non.food.Quantity",
+          "non.food.Parts",
+          "electronics.Programs",
+          "non.food.RecommendedAge",
+          "non.food.Material",
+          "non.food.Grammage",
+          "home.ThreadCount",
+          "home.Filling",
+          "non.food.Capacity",
+          "non.food.Dimensions",
+          "home.PhotoSize",
+          "home.Watts",
+          "home.LightbulbBase",
+          "home.Lumens",
+          "home.TypeofLight",
+          "home.EnergyEfficiency",
+          "kitchen.Non-Stick",
+          "kitchen.GasHobCompatible",
+          "kitchen.GlassCeramicCompatible",
+          "kitchen.InductionCompatible",
+          "kitchen.OvenSafe",
+          "kitchen.RefridgeratorSafe",
+          "kitchen.FreezerSafe",
+          "non.food.Dishwashersafe",
+          "baby.BPA",
+          "home.Machinewashable",
+          "home.IroningSafe",
+          "home.TumbleDryerSafe",
+          "home.ElasticBand",
+          "home.Waterproof",
+          "home.Hypoallergenic",
+          "home.Anti-dustmites",
+          "home.Sofabed",
+          "non.food.LinearMetresofDryingSpace",
+          "non.food.SupportfortheIron",
+          "non.food.VapourJet",
+          "baby.Isofix",
+          "baby.Group",
+          "baby.Teatcomposition",
+          "stationery.Pentype",
+          "stationery.DriesQuickly",
+          "stationery.WashableInk",
+          "stationery.Layout",
+          "electronics.Capsules",
+          "electronics.GroundCoffee",
+          "electronics.SmartTV",
+          "electronics.Resolution",
+          "electronics.Plugs",
+          "electronics.Switch",
+          "electronics.Amperage",
+          "electronics.USBPorts",
+          "electronics.TypeofBattery",
+          "electronics.Rechargable",
+          "electronics.Wireless",
+          "electronics.Bagless",
+          "electronics.TypeofFilter",
+          "home.RemovableInnerbucket",
+          "auto.Speeds",
+          "home.Scent",
+          "auto.AirFreshenerPlacement",
+          "auto.AppropriateEngines",
+          "auto.OilComposition",
+          "auto.Viscosity",
+          "home.Fueltype",
+          "stationery.Perfurated",
+          "home.UVProtectionFactor",
+          "home.SwimmingArea",
+          "books.Author",
+          "books.Genre",
+          "home.Collection",
+          "books.Sinopsis",
+          "home.Gastype",
+          "non.food.Assorted",
+          "common.Label1Desktop",
+          "common.Label1Mob",
+          "padded",
+          "reach",
+          "voltage",
+          "productSetWeight"
+        ],
+        "attributesValues": [],
+        "hasValues": false,
+        "tabIndex": "s1"
+      },
+      {
+        "title": "Características",
+        "productAttributes": [
+          "food.Benefits",
+          "food.FatContent",
+          "food.Conservation",
+          "food.ProfileandHarmonization",
+          "food.GuardandService",
+          "food.Awards",
+          "food.Winemaking",
+          "food.Stage",
+          "food.Winemaker",
+          "food.ProducerHistory",
+          "food.Recommendeddailyamounts",
+          "food.FoodType",
+          "food.Style",
+          "food.ServiceTemperature",
+          "food.Howtouse",
+          "food.Results",
+          "food.Necessity",
+          "food.Howtoconsume",
+          "food.Tips",
+          "food.Creation",
+          "food.Slaughter",
+          "food.Production",
+          "food.CientificName",
+          "food.Conditions",
+          "food.OtherInformations",
+          "food.Producer'sName",
+          "food.Producer'sAdress",
+          "non.food.Madein",
+          "baby.Fabric",
+          "baby.Lining",
+          "baby.Padding",
+          "baby.Structure",
+          "baby.Adjustablebedside",
+          "non.food.Wheels",
+          "baby.Safetybelts",
+          "baby.Beltprotector",
+          "baby.HarnessMode-Forward-Facing",
+          "baby.SafetySystem",
+          "baby.Canbemountedinregularchairs",
+          "baby.AnatomicSeat",
+          "baby.Reversiblechair",
+          "baby.Position",
+          "baby.Reclinepositions",
+          "non.food.HeightAdjustPositions",
+          "baby.Centraladjustment",
+          "baby.LockingSystem",
+          "baby.FixingSystem",
+          "baby.Ventilationsystem",
+          "baby.RotatingSystem",
+          "baby.Headrest",
+          "baby.Armrest",
+          "baby.SupportfortheFeet",
+          "baby.SideProtection",
+          "baby.Suspension",
+          "baby.RemovableBooster",
+          "baby.DiaperChanger",
+          "baby.Handle",
+          "baby.Basket",
+          "baby.Board",
+          "baby.ActivityBoard",
+          "baby.Cover",
+          "baby.FootCover",
+          "baby.Foldable",
+          "baby.BatteriesRequired",
+          "electronics.Power",
+          "baby.Range",
+          "non.food.Weight",
+          "baby.RecommendedWeight",
+          "home.MaximumWeightSupported",
+          "baby.TransportationBag",
+          "stationery.Tip",
+          "stationery.LineWidth",
+          "stationery.Punching",
+          "stationery.Numberofsheets",
+          "stationery.Binding",
+          "stationery.Sealingtype",
+          "books.Theme",
+          "books.SchoolYear",
+          "books.Publisher",
+          "books.PublicationDate",
+          "books.Pages",
+          "baby.Sterilizable",
+          "baby.Flow",
+          "baby.MicrowaveSafe",
+          "baby.WaterDischargeTube",
+          "stationery.Window",
+          "books.ISBN",
+          "common.Label2Desktop",
+          "common.Label2Mob"
+        ],
+        "attributesValues": [
+          {
+            "attributeId": "food.Benefits",
+            "attributeType": "string",
+            "attributeValue": "O leite pertence ao grupo dos lacticínios na roda dos alimentos. O teor de gordura do leite varia consoante seja magro, meio gordo ou gordo. Com essa variação, diferem também os teores de algumas vitaminas que estão associadas à gordura, como as vitaminas A e D, mais abundantes nas versões com percentagens superiores de gordura. Já no que diz respeito ao teor de proteínas, que são de alto valor biológico, minerais, como cálcio, potássio e fósforo, e vitaminas do complexo B, sobretudo B2 e B12, não se registam diferenças significativas.",
+            "attributeIdTranslated": "Benefícios"
+          },
+          {
+            "attributeId": "food.Howtoconsume",
+            "attributeType": "string",
+            "attributeValue": "Para um pequeno-almoço ou lanche mais completos, faça um delicioso batido com o seu leite e pedaços de fruta.",
+            "attributeIdTranslated": "Sugestões de Consumo"
+          },
+          {
+            "attributeId": "food.Tips",
+            "attributeType": "string",
+            "attributeValue": "Não necessita ser fervido.",
+            "attributeIdTranslated": "Dicas"
+          }
+        ],
+        "hasValues": true,
+        "tabIndex": "s2"
+      },
+      {
+        "title": "Outras Informações",
+        "productAttributes": [
+          "common.Instructions",
+          "common.AdditionalInformation",
+          "common.Precautions",
+          "non.food.Warranty",
+          "common.Package",
+          "common.Disclaimer",
+          "common.Label3Desktop",
+          "common.Label3Mob"
+        ],
+        "attributesValues": [
+          {
+            "attributeId": "common.Disclaimer",
+            "attributeType": "string",
+            "attributeValue": "Os produtos alimentares estão sujeitos a constantes alterações das quais o consumidor deverá estar sempre informado. Modelo Continente Hipermercados S.A. não é responsável por eventuais divergências e/ou modificações relacionadas com a informação sobre os produtos presentes no nosso website, facultada pelo fornecedor/fabricante, e a que figura nos rótulos dos mesmos. <br> Por esta razão, recomendamos que leia sempre a informação nutricional, lista de ingredientes, recomendações de utilização, preparação e/ou conservação, assim como todas as informações, de caráter obrigatório e/ou voluntário, de um produto alimentar antes de o utilizar ou consumir.",
+            "attributeIdTranslated": "Aviso Legal"
+          }
+        ],
+        "hasValues": true,
+        "tabIndex": "s3"
+      }
+    ],
+    "nutritionalInfoUrl": {},
+    "productBrandID": "col",
+    "adjustedSelectedProductUrl": "https://www.continente.pt/produto/leite-uht-meio-gordo-continente-continente-6879912.html",
+    "attributesHtml": "",
+    "promotionsHtml": "",
+    "optionsHtml": "",
+    "notes": {
+      "html": "<div class=\"note-preview-section d-none\"\n    data-pid=\"6879912\"\n    data-saved-note=\"\">\n\n    <div class=\"note-preview-display\" data-saved-note=\"\">\n        \n    </div>\n</div>\n\n<div class=\"js-notes-container\">\n    <div class=\"add-note col-add-note d-none\">\n        <button type=\"button\" name=\"expand-note-section\" class=\"expand-note-section notes-disabled-js\" aria-label=\"Adicionar coment&aacute;rio\" data-pid=\"6879912\">\n            <div class=\"note-empty\">\n                \r\n\r\n\r\n\r\n\r\n\r\n\r\n<span class=\"svg-wrapper col-svg-wrapper svg-icon-notes-col \" style=\"width:28px; height:30px\">\r\n    <svg width='100%' height='100%' viewBox='0 0 17 17' fill='none' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M5.52752 1.01768C5.60942 0.939274 5.71842 0.895508 5.8318 0.895508H11.5451C11.5517 0.895508 11.5582 0.895653 11.5647 0.895942C11.9777 0.914308 12.3663 1.08962 12.6526 1.39447C12.9406 1.7012 13.0862 2.10572 13.0785 2.51384V5.99957C13.0785 6.24258 12.8815 6.43957 12.6385 6.43957C12.3955 6.43957 12.1985 6.24258 12.1985 5.99957V2.49956C12.2027 2.30921 12.1351 2.12898 12.011 1.99685C11.8859 1.8636 11.7178 1.78581 11.5342 1.77551H6.00847L1.77847 5.82519V13.6073C1.77847 13.6143 1.7783 13.6212 1.77797 13.6282C1.77453 13.7005 1.78855 13.7846 1.82036 13.8641C1.85308 13.946 1.90012 14.0188 1.95167 14.0718C2.0218 14.1365 2.09431 14.1828 2.16861 14.2125C2.23693 14.2399 2.31849 14.2544 2.42514 14.2544H5.99957C6.24258 14.2544 6.43957 14.4514 6.43957 14.6944C6.43957 14.9374 6.24258 15.1344 5.99957 15.1344H2.42514C2.23845 15.1344 2.04001 15.1089 1.84166 15.0295C1.65125 14.9534 1.48562 14.8412 1.34413 14.7085L1.33394 14.6987C1.18732 14.552 1.07621 14.3733 1.00325 14.1908C0.92977 14.007 0.890538 13.8019 0.898469 13.5979V5.6373C0.898469 5.51728 0.947496 5.40247 1.03419 5.31947L5.52752 1.01768Z' fill='#EB0203'/><path fill-rule='evenodd' clip-rule='evenodd' d='M6.00554 0.930933C6.16752 1.00017 6.27259 1.15936 6.27259 1.33552V4.91034C6.27259 5.22299 6.14442 5.52089 5.93045 5.73495C5.71648 5.94902 5.41862 6.07731 5.10593 6.07731H1.33259C1.15283 6.07731 0.991137 5.96795 0.924216 5.8011C0.857296 5.63426 0.898605 5.44348 1.02855 5.31926L5.52855 1.01747C5.65589 0.895737 5.84356 0.861691 6.00554 0.930933ZM2.42962 5.19731H5.10593C5.1799 5.19731 5.25538 5.16554 5.30807 5.11283C5.36076 5.06011 5.39259 4.98452 5.39259 4.91034V2.36484L2.42962 5.19731Z' fill='#EB0203'/><path fill-rule='evenodd' clip-rule='evenodd' d='M15.0173 9.98349C13.627 8.59322 11.373 8.59322 9.9827 9.98349C8.59243 11.3738 8.59243 13.6278 9.9827 15.0181C11.373 16.4084 13.627 16.4084 15.0173 15.0181C16.4076 13.6278 16.4076 11.3738 15.0173 9.98349ZM9.36045 9.36123C11.0944 7.62731 13.9056 7.62731 15.6396 9.36123C17.3735 11.0952 17.3735 13.9064 15.6396 15.6403C13.9056 17.3743 11.0944 17.3743 9.36045 15.6403C7.62652 13.9064 7.62652 11.0952 9.36045 9.36123Z' fill='#EB0203'/><path fill-rule='evenodd' clip-rule='evenodd' d='M15.0613 12.5004C15.0613 12.7434 14.8643 12.9404 14.6213 12.9404L10.3787 12.9404C10.1357 12.9404 9.93868 12.7434 9.93868 12.5004C9.93868 12.2574 10.1357 12.0604 10.3787 12.0604L14.6213 12.0604C14.8643 12.0604 15.0613 12.2574 15.0613 12.5004Z' fill='#EB0203'/><path fill-rule='evenodd' clip-rule='evenodd' d='M12.5004 9.93868C12.7434 9.93868 12.9404 10.1357 12.9404 10.3787L12.9404 14.6213C12.9404 14.8643 12.7434 15.0613 12.5004 15.0613C12.2574 15.0613 12.0604 14.8643 12.0604 14.6213L12.0604 10.3787C12.0604 10.1357 12.2574 9.93868 12.5004 9.93868Z' fill='#EB0203'/></svg>\r\n</span>\r\n\n            </div>\n            <div class=\"note-full\">\n                \r\n\r\n\r\n\r\n\r\n\r\n\r\n<span class=\"svg-wrapper col-svg-wrapper svg-icon-notes-full-col \" style=\"width:28px; height:30px\">\r\n    <svg width='100%' height='100%' viewBox='0 0 17 17' fill='none' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M14.1962 7.58302C13.9101 7.61014 13.6404 7.75476 13.4548 7.97934L8.5354 13.9317L8.33044 15.9094L10.2332 15.3365L15.1086 9.43737C15.1179 9.42201 15.1282 9.4071 15.1395 9.39275C15.2351 9.27149 15.306 9.141 15.3508 9.00134C15.3943 8.86562 15.4092 8.72253 15.3958 8.58156C15.3824 8.4406 15.3409 8.30286 15.2727 8.17773C15.2003 8.04503 15.1046 7.92529 14.993 7.82806C14.7733 7.64292 14.4858 7.55556 14.1962 7.58302ZM15.878 9.87529C15.8647 9.8996 15.849 9.92288 15.8309 9.94476L10.8267 15.9997C10.7714 16.0667 10.6976 16.1157 10.6144 16.1408L7.95154 16.9426C7.81061 16.985 7.65778 16.9541 7.54434 16.8604C7.43089 16.7666 7.37186 16.6223 7.38703 16.4759L7.6738 13.7087C7.68275 13.6223 7.71702 13.5406 7.7723 13.4737L12.7765 7.41874C13.1075 7.01819 13.5895 6.75658 14.1131 6.70694C14.6324 6.65771 15.1574 6.81421 15.5636 7.15812L15.5676 7.16146L15.5675 7.16148C15.7615 7.32967 15.9235 7.53317 16.0453 7.75641C16.1716 7.98801 16.2475 8.2411 16.2719 8.49851C16.2963 8.75592 16.2693 9.01877 16.1888 9.26997C16.1177 9.49161 16.0113 9.69368 15.878 9.87529Z' fill='#EB0203'/><path fill-rule='evenodd' clip-rule='evenodd' d='M6.00456 0.930933C6.16655 1.00017 6.27162 1.15936 6.27162 1.33552V4.91034C6.27162 5.22299 6.14345 5.52089 5.92948 5.73495C5.7155 5.94902 5.41764 6.07731 5.10495 6.07731H1.33162C1.15185 6.07731 0.99016 5.96795 0.92324 5.80111C0.85632 5.63426 0.897628 5.44348 1.02757 5.31926L5.52757 1.01747C5.65491 0.895737 5.84258 0.861691 6.00456 0.930933ZM2.42864 5.19731H5.10495C5.17893 5.19731 5.2544 5.16554 5.30709 5.11283C5.35979 5.06011 5.39162 4.98452 5.39162 4.91034V2.36484L2.42864 5.19731Z' fill='#EB0203'/><path fill-rule='evenodd' clip-rule='evenodd' d='M2.55957 7.99957C2.55957 7.75657 2.75657 7.55957 2.99957 7.55957H8.99957C9.24258 7.55957 9.43957 7.75657 9.43957 7.99957C9.43957 8.24258 9.24258 8.43957 8.99957 8.43957H2.99957C2.75657 8.43957 2.55957 8.24258 2.55957 7.99957Z' fill='#EB0203'/><path fill-rule='evenodd' clip-rule='evenodd' d='M2.6709 10.4839C2.6709 10.2409 2.86789 10.0439 3.1109 10.0439H7.1109C7.3539 10.0439 7.5509 10.2409 7.5509 10.4839C7.5509 10.727 7.3539 10.9239 7.1109 10.9239H3.1109C2.86789 10.9239 2.6709 10.727 2.6709 10.4839Z' fill='#EB0203'/><path fill-rule='evenodd' clip-rule='evenodd' d='M5.52655 1.01768C5.60844 0.939274 5.71745 0.895508 5.83083 0.895508H11.5442C11.5507 0.895508 11.5572 0.895653 11.5637 0.895942C11.9768 0.914308 12.3653 1.08962 12.6516 1.39447C12.9396 1.7012 13.0852 2.10572 13.0775 2.51384V5.99957C13.0775 6.24258 12.8805 6.43957 12.6375 6.43957C12.3945 6.43957 12.1975 6.24258 12.1975 5.99957V2.49956C12.2017 2.30921 12.1341 2.12898 12.0101 1.99685C11.8849 1.8636 11.7168 1.78581 11.5333 1.77551H6.00749L1.77749 5.82519V13.6073C1.77749 13.6143 1.77733 13.6212 1.77699 13.6282C1.77355 13.7005 1.78757 13.7846 1.81938 13.8641C1.85211 13.946 1.89914 14.0188 1.9507 14.0718C2.02082 14.1365 2.09334 14.1828 2.16763 14.2125C2.23596 14.2399 2.31751 14.2544 2.42416 14.2544H5.9986C6.2416 14.2544 6.4386 14.4514 6.4386 14.6944C6.4386 14.9374 6.2416 15.1344 5.9986 15.1344H2.42416C2.23747 15.1344 2.03903 15.1089 1.84069 15.0295C1.65027 14.9534 1.48465 14.8412 1.34316 14.7085L1.33297 14.6987C1.18634 14.552 1.07523 14.3733 1.00227 14.1908C0.928793 14.007 0.889562 13.8019 0.897492 13.5979V5.6373C0.897492 5.51728 0.946519 5.40247 1.03321 5.31947L5.52655 1.01768Z' fill='#EB0203'/><path fill-rule='evenodd' clip-rule='evenodd' d='M6.00456 0.930933C6.16655 1.00017 6.27162 1.15936 6.27162 1.33552V4.91034C6.27162 5.22299 6.14345 5.52089 5.92948 5.73495C5.7155 5.94902 5.41764 6.07731 5.10495 6.07731H1.33162C1.15185 6.07731 0.99016 5.96795 0.92324 5.80111C0.85632 5.63426 0.897628 5.44348 1.02757 5.31926L5.52757 1.01747C5.65491 0.895737 5.84258 0.861691 6.00456 0.930933ZM2.42864 5.19731H5.10495C5.17893 5.19731 5.2544 5.16554 5.30709 5.11283C5.35979 5.06011 5.39162 4.98452 5.39162 4.91034V2.36484L2.42864 5.19731Z' fill='#EB0203'/></svg>\r\n</span>\r\n\n            </div>\n        </button>\n    </div>\n    <div class=\"add-note-section col-add-note-section d-none w-100\" data-pid=\"6879912\">\n        <form role=\"addNote\" action=\"https://www.continente.pt/on/demandware.store/Sites-continente-Site/default/Product-AddNote\" method=\"post\" name=\"addNote\" class=\"add-note-form\">\n            <div class=\"field-input-label col-field-input-label label-animation\">\n                <input class=\"form-control add-product-note pwc-form-input col-form-input js-autofill-enabled \"\n                    \n                        id=\"add-product-note-input\"\n                    \n                    type=\"text\"\n                    title\n                    name=\"note\"\n                    value=\"\"\n                    data-saved-note=\"\"\n                    data-pid=\"6879912\"\n                    role=\"combobox\"\n                    aria-expanded=\"false\"\n                    aria-activedescendant=\"\"\n                    autocomplete=\"off\"\n                    maxlength=\"80\"/>\n                \n                    <label class=\"add-product-note-label\" for=\"add-product-note-input\">Adicione Coment&aacute;rios</label>\n                \n\n                <input type=\"hidden\" name=\"productID\" value=\"6879912\" />\n                <button type=\"submit\" name=\"add-note-button\" class=\"js-add-note-button add-note-button\" aria-label=\"Adicionar\">\n                    \r\n\r\n\r\n\r\n\r\n\r\n\r\n<span class=\"svg-wrapper col-svg-wrapper svg-icon-white-check \" style=\"width:16px; height:11px\">\r\n    <svg class='svg-inline icon-white-check' xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 18 12'><path fill='#FFF' fill-rule='evenodd' d='M17.109.684a1.012 1.012 0 0 0-1.407 0L6.921 9.257 2.298 4.744a1.012 1.012 0 0 0-1.407 0 .954.954 0 0 0 0 1.373l5.326 5.199c.194.19.449.284.703.284.255 0 .51-.095.704-.284l9.485-9.259a.954.954 0 0 0 0-1.373z'/></svg>\r\n</span>\r\n\n                </button>\n                <button type=\"button\" name=\"note-reset-button\" class=\"js-note-reset-button note-reset-button \" aria-label=\"Redefinir/ Restaurar\">\n                    \r\n\r\n\r\n\r\n\r\n\r\n\r\n<span class=\"svg-wrapper col-svg-wrapper svg-icon-close \" style=\"width:16px; height:16px\">\r\n    <svg class='svg-inline icon-close' width='14' height='14' viewBox='0 0 14 14' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M7.00025 5.58576L12.2932 0.292762C12.6832 -0.0982383 13.3173 -0.0982383 13.7073 0.292762C14.0973 0.683762 14.0973 1.31676 13.7073 1.70676L8.41425 6.99976L13.7073 12.2928C14.0973 12.6828 14.0973 13.3168 13.7073 13.7068C13.3173 14.0968 12.6832 14.0968 12.2932 13.7068L7.00025 8.41376L1.70725 13.7068C1.31625 14.0968 0.68325 14.0968 0.29325 13.7068C-0.09675 13.3168 -0.09775 12.6828 0.29325 12.2928L5.58625 6.99976L0.29325 1.70676C-0.09775 1.31576 -0.09775 0.682762 0.29325 0.292762C0.68425 -0.0972383 1.31725 -0.0982383 1.70725 0.292762L7.00025 5.58576Z' fill='#EB0203'/></svg>\r\n</span>\r\n\n                </button>\n                <input type=\"hidden\" value=\"null\" name=\"lang\" />\n            </div>\n        </form>\n    </div>\n</div>\n\n"
+    },
+    "quantity": {
+      "html": "<div class=\"ct-tile-quantity d-none\" data-pid=\"6879912\">\n    <input type=\"hidden\" class=\"add-to-cart-url\" value=\"https://www.continente.pt/on/demandware.store/Sites-continente-Site/default/Cart-AddProduct\" />\n\n    <div class=\"d-none tile-delete-confirmation-btn\"\n        data-pid=\"6879912\"\n        data-delay-time=\"3000\"\n        data-in-cart-msg=\"no carrinho\"\n        data-one-product-added=\"Adicionado ao carrinho\"\n        data-remove-from-cart-msg=\"Removido do carrinho\"\n        data-stay-open=\"6000.0\"\n        data-confirmation-image=\"{&quot;url&quot;:&quot;https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/-/Sites-col-master-catalog/default/dw66d59f15/images/col/687/6879912-frente.jpg?sw=87&amp;sh=80&quot;,&quot;fallbackimage&quot;:{&quot;url&quot;:&quot;https://www.continente.pt/dw/image/v2/BDVS_PRD/on/demandware.static/Sites-continente-Site/-/default/dweb166559/images/noimagelarge_product.png?sw=87&amp;sh=80&quot;,&quot;title&quot;:&quot;Leite UHT Meio Gordo Continente&quot;,&quot;alt&quot;:&quot;Leite UHT Meio Gordo Continente&quot;},&quot;title&quot;:&quot;Leite UHT Meio Gordo Continente&quot;,&quot;alt&quot;:&quot;Leite UHT Meio Gordo Continente&quot;}\"\n    ></div>\n\n    \n\n\n    \n    \n\n\n\n\n\n\n\n<div class=\"ct-tile-quantity-update ct-tile-quantity-update-pid-6879912 quantity-update product-qty-vue align-content-center\"\n    data-remove-action=\"https://www.continente.pt/on/demandware.store/Sites-continente-Site/default/Cart-RemoveProductLineItem\"\n    data-action=\"https://www.continente.pt/on/demandware.store/Sites-continente-Site/default/Cart-UpdateQuantity\"\n    data-dimension-update=\"https://www.continente.pt/on/demandware.store/Sites-continente-Site/default/Cart-DimensionUpdate\"\n    data-pid=\"6879912\"\n    data-uuid=\"2d9bf3c61057f54f2671670a20\"\n    data-add-delay=\"500.0\"\n    data-measure-options=\"{&quot;hasConversionRate&quot;:false,&quot;hasAlternativeSaleUnit&quot;:false,&quot;unitConversionRate&quot;:0,&quot;minOrderQuantity&quot;:6,&quot;stepQuantity&quot;:6,&quot;primaryunit&quot;:&quot;un&quot;,&quot;secondaryunit&quot;:&quot;lt&quot;,&quot;selectedunit&quot;:&quot;primary&quot;,&quot;maxNumberOfUnitsPerSale&quot;:90}\"\n    data-price-available=\"true\"\n    :data-has-error=\"isMaxQtyReached || isMinQtyReached || qtySelectedMoreThanOne\"\n    >\n\n    <template v-show=\"prodUnits\">\n        <transition name=\"fade\">\n            <div class=\"measurement-unit-section align-items-center justify-content-center\" v-if=\"isPriceAvailable && dimensionTimeout && !isMinQtyReached && !isMaxQtyReached && prodUnits && prodUnits.hasAlternativeUnit\">\n                <p aria-live=\"polite\">{{displayValue + \" \" + prodUnits.secondaryUnit + \" = \" + dimensionValue  + \" \" + prodUnits.primaryUnit}}</p>\n            </div>\n        </transition>\n\n        <div class=\"quantity-input-wrapper col-quantity-input-wrapper has-units\">\n            <label class=\"visually-hidden\" :for=\"'quantity-' + pid + additionalTag\">\n                Quantidade no carrinho\n            </label>\n\n            <input\n                :ref=\"'quantityInput-' + pid + additionalTag\"\n                class=\"add-to-cart-quantity form-control pwc-form-input col-form-input text-center pwc-form-input-quantity\"\n                inputmode=\"numeric\"\n                :class=\"{'is-invalid': isInvalid}\"\n                :data-pid=\"pid + additionalTag\"\n                :name=\"'quantity-' + pid + additionalTag\"\n                type=\"text\"\n                aria-label=\"Insira a quantidade\"\n                aria-live=\"polite\"\n                :aria-valuenow=\"displayValue\"\n                title\n                v-model=\"displayValue\"\n                @change=\"updateQuantity\"\n                @input=\"validateQuantity\"\n                @blur=\"restoreQtyFormat\"\n                :disabled=\"!isPriceAvailable\"\n            />\n\n            <span class=\"quantity-icon quantity-icon--minus\">\n                \n                    <template v-if=\"(isPriceAvailable && isMinQtyReached && !isMaxQtyReached) || displayValue == (prodUnits ? minQtyToDisplay / prodUnits.step : 1)\">\n                        <button class=\"decrease-quantity-btn\"\n                            @click=\"updateQuantity\"\n                            :disabled=\"!isPriceAvailable\"\n                            role=\"button\"\n                            aria-label=\"Remover do carrinho\"\n                            >\n                                \r\n\r\n\r\n\r\n\r\n\r\n\r\n<span class=\"svg-wrapper col-svg-wrapper svg-icon-trash \" style=\"width:auto; height:auto\">\r\n    <svg class='svg-inline icon-trash' width='14' height='16' viewBox='0 0 14 16' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M3.65552 3.1875V2.5C3.65552 1.36081 4.57883 0.4375 5.71802 0.4375H8.46802C9.6072 0.4375 10.5305 1.36081 10.5305 2.5V3.1875H13.2805C13.66 3.1875 13.968 3.4955 13.968 3.875C13.968 4.2545 13.66 4.5625 13.2805 4.5625H12.593V13.5C12.593 14.6392 11.6697 15.5625 10.5305 15.5625H3.65552C2.51633 15.5625 1.59302 14.6392 1.59302 13.5V4.5625H0.905518C0.526018 4.5625 0.218018 4.2545 0.218018 3.875C0.218018 3.4955 0.526018 3.1875 0.905518 3.1875H3.65552ZM5.03052 3.1875H9.15552V2.5C9.15552 2.1205 8.84752 1.8125 8.46802 1.8125H5.71802C5.33852 1.8125 5.03052 2.1205 5.03052 2.5V3.1875ZM2.96802 4.5625V13.5C2.96802 13.8795 3.27602 14.1875 3.65552 14.1875H10.5305C10.91 14.1875 11.218 13.8795 11.218 13.5V4.5625H2.96802Z' fill='#EB0203'/></svg>\r\n</span>\r\n\n                        </button>\n                    </template>\n                    <template v-else>\n                        <button class=\"decrease-quantity-btn\"\n                            @click=\"updateQuantity\"\n                            :disabled=\"!isPriceAvailable\"\n                            role=\"button\"\n                            aria-label=\"Reduzir quantidade\"\n                            >\n                                \r\n\r\n\r\n\r\n\r\n\r\n\r\n<span class=\"svg-wrapper col-svg-wrapper svg-icon-product-minus-red \" style=\"width:auto; height:auto\">\r\n    <svg width='16' height='2' viewBox='0 0 16 2' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M1.84819 1.91665H14.6815C15.1875 1.91665 15.5982 1.50598 15.5982 0.99998C15.5982 0.49398 15.1875 0.083313 14.6815 0.083313H1.84819C1.34219 0.083313 0.931519 0.49398 0.931519 0.99998C0.931519 1.50598 1.34219 1.91665 1.84819 1.91665Z' fill='#EB0203'/></svg>\r\n</span>\r\n\n                        </button>\n                    </template>\n                \n            </span>\n\n            <span class=\"quantity-icon quantity-icon--plus\">\n                <button class=\"increase-quantity-btn\"\n                    @click=\"updateQuantity\"\n                    :disabled=\"isMaxQtyDisabled || !isPriceAvailable\"\n                    role=\"button\"\n                    aria-label=\"Aumentar quantidade\"\n                    >\n                    \r\n\r\n\r\n\r\n\r\n\r\n\r\n<span class=\"svg-wrapper col-svg-wrapper svg-icon-product-plus-red \" style=\"width:auto; height:auto\">\r\n    <svg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M8.26453 0.666687C8.77053 0.666687 9.18152 1.07768 9.18152 1.58368V7.08368H14.6815C15.1874 7.08368 15.5983 7.49384 15.5985 7.99969C15.5985 8.50569 15.1875 8.91669 14.6815 8.91669H9.18152V14.4167C9.18152 14.9227 8.77053 15.3337 8.26453 15.3337C7.75868 15.3335 7.34851 14.9226 7.34851 14.4167V8.91669H1.84851C1.34251 8.91669 0.931519 8.50569 0.931519 7.99969C0.931695 7.49384 1.34262 7.08368 1.84851 7.08368H7.34851V1.58368C7.34851 1.07779 7.75868 0.666863 8.26453 0.666687Z' fill='#EB0203'/></svg>\r\n</span>\r\n\n                </button>\n                <span class=\"quantity-btn-disabled-placeholder\"></span>\n            </span>\n        </div>\n\n        <template v-if=\"showNotes\">\n            \n\n\n<div class=\"add-note-link-container \">\n    \n    \n    <div class=\"add-note col-add-note\">\n        <a href=\"null\" class=\"ct-add-note-redirect-pdp\" aria-label=\"Adicionar coment&aacute;rio\">\n            \r\n\r\n\r\n\r\n\r\n\r\n\r\n<span class=\"svg-wrapper col-svg-wrapper svg-icon-notes \" style=\"width:20px; height:20px\">\r\n    \r\n</span>\r\n\n            <div class=\"available-note col-available-note d-none\"></div>\n        </a>\n    </div>\n</div>\n\n        </template>\n\n        <div class=\"w-100 d-sm-none\" role=\"status\" aria-live=\"polite\"></div>\n\n        <template v-if=\"isPriceAvailable && showQtyReached\">\n            <transition name=\"fade\">\n                <span class=\"quantity-error pwc-span-error product-max-allocation text-center qty-warning-bubble\"\n                    v-if=\"isMaxQtyReached\"\n                    >\n                    Quant. m&aacute;xima atingida\n                    <div class=\"qty-warning-bubble__tail\"></div>\n                </span>\n            </transition>\n\n            <transition name=\"fade\">\n                <span class=\"quantity-error pwc-span-error product-min-allocation text-center qty-warning-bubble\"\n                    :data-pid=\"pid\"\n                    v-if=\"isMinQtyReached\"\n                    >\n                    Quant. m&iacute;nima atingida\n                    <div class=\"qty-warning-bubble__tail\"></div>\n                </span>\n            </transition>\n        </template>\n    </template>\n</div>\n\n\n    <input class=\"quantity-value-mask d-none\" name=\"quantity\" type=\"number\" min=\"0\" value/>\n</div>\n"
+    },
+    "nutritionalInfoUrlString": "https://www.continente.pt/on/demandware.store/Sites-continente-Site/default/Product-ProductNutritionalInfoTab?pid=6879912&ean=5601312508007&supplierid=5600000000403&enabledce=true",
+    "brandRefineURL": "https://www.continente.pt/pesquisa/?q=Continente&prefn1=brand&prefv1=Continente"
+  },
+  "resources": {
+    "info_selectforstock": "Select Styles for Availability",
+    "assistiveSelectedText": "selected",
+    "sizeSelectLabel": "Selecione",
+    "variationError": "Selecione a opção do produto",
+    "variationErrorFavorite": "Para adicionar o produto à lista, tem de escolher primeiro a cor/tamanho",
+    "seeDetailsLabel": "Ver Detalhes",
+    "closeButtonText": "Close Quickview Dialog",
+    "closeTooltipText": "Fechar",
+    "enterDialogMessage": "Selecione uma opção",
+    "priceRangeLabel": "Desde",
+    "pvprLabel": "PVPR",
+    "currencyEuroLabel": "€",
+    "commaLabel": ",",
+    "badgeMoreThan": "Mais de",
+    "badgeDiscount": "Desconto",
+    "priceFromLabel": "Price reduced from",
+    "priceToLabel": "to",
+    "inCartLabel": "no carrinho",
+    "removeFromCartLabel": "Removido do carrinho",
+    "CONFIRMATION_POPUP_DISPLAY_DURATION": 6000
+  },
+  "productExistsInWishList": false,
+  "dataLayerObject": "{\"currency\":\"EUR\",\"value\":0.86,\"items\":[{\"item_name\":\"Leite UHT Meio Gordo Continente\",\"item_id\":\"6879912\",\"price\":0.86,\"quantity\":6,\"index\":1,\"affiliation\":\"col\",\"measurement_unit\":\"un\",\"item_list_name\":\"default\",\"retek_category\":\"10 | 8 | 801 | 3 | 1\",\"item_brand\":\"Continente\",\"item_category\":\"Laticínios e Ovos\",\"item_category2\":\"Leite\",\"item_category3\":\"Leite Meio Gordo\",\"item_list_id\":\"laticinios-leite-meio-gordo\"}]}",
+  "tracking_personal_adv_consent": true
+}
