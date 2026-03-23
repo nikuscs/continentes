@@ -17,9 +17,8 @@ concurrency:
   group: release
   cancel-in-progress: false
 
-permissions:
-  contents: write
-  pull-requests: read
+# Default deny; enable per-job below
+permissions: {}
 
 env:
   CARGO_TERM_COLOR: always
@@ -30,12 +29,15 @@ jobs:
   checks:
     name: Checks
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: dtolnay/rust-toolchain@efa25f7f19611383d5b0ccf2d1c8914531636bf9 # pin action
         with:
+          toolchain: stable
           components: rustfmt, clippy
-      - uses: Swatinem/rust-cache@v2
+      - uses: Swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5 # v2.8.2
       - name: Format
         run: cargo fmt --all -- --check
       - name: Clippy
@@ -47,13 +49,14 @@ jobs:
     name: Create Tag
     needs: checks
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     outputs:
       version: ${{ steps.bump.outputs.version }}
       tag: ${{ steps.bump.outputs.tag }}
-      commit_sha: ${{ steps.commit.outputs.sha }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -68,7 +71,12 @@ jobs:
       - name: Get current version
         id: current
         run: |
-          VERSION=$(grep '^version = ' Cargo.toml | head -1 | sed 's/version = "\(.*\)"/\1/')
+          TAG_VERSION=$(git tag -l 'v[0-9]*.[0-9]*.[0-9]*' | sed 's/^v//' | sort -V | tail -n1 || true)
+          if [ -n "$TAG_VERSION" ]; then
+            VERSION="$TAG_VERSION"
+          else
+            VERSION=$(grep '^version = ' Cargo.toml | head -1 | sed 's/version = "\(.*\)"/\1/')
+          fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "Current version: $VERSION"
 
@@ -98,26 +106,23 @@ jobs:
           echo "tag=v$NEW_VERSION" >> $GITHUB_OUTPUT
           echo "New version: $NEW_VERSION"
 
-      - name: Update Cargo.toml
+      - name: Create tag
         run: |
-          sed -i 's/^version = ".*"/version = "${{ steps.bump.outputs.version }}"/' Cargo.toml
-          cat Cargo.toml | head -10
-
-      - name: Commit and tag
-        id: commit
-        run: |
+          if git ls-remote --tags origin "refs/tags/${{ steps.bump.outputs.tag }}" | grep -q "${{ steps.bump.outputs.tag }}"; then
+            echo "::error::Tag ${{ steps.bump.outputs.tag }} already exists on origin"
+            exit 1
+          fi
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add Cargo.toml
-          git commit -m "chore: bump version to ${{ steps.bump.outputs.version }}"
-          echo "sha=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
           git tag -a "${{ steps.bump.outputs.tag }}" -m "Release ${{ steps.bump.outputs.tag }}"
-          git push origin main --follow-tags
+          git push origin "${{ steps.bump.outputs.tag }}"
 
   build:
     name: Build (${{ matrix.target }})
     needs: create-tag
     runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
     strategy:
       matrix:
         include:
@@ -132,17 +137,18 @@ jobs:
             artifact: cnt-linux-arm64
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ref: ${{ needs.create-tag.outputs.tag }}
 
       - name: Install Rust
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@efa25f7f19611383d5b0ccf2d1c8914531636bf9 # pin action
         with:
+          toolchain: stable
           targets: ${{ matrix.target }}
 
       - name: Cache
-        uses: Swatinem/rust-cache@v2
+        uses: Swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5 # v2.8.2
         with:
           key: release-${{ matrix.target }}
 
@@ -155,24 +161,28 @@ jobs:
           tar -czvf ../../../${{ matrix.artifact }}.tar.gz ${{ env.BINARY_NAME }}
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
         with:
           name: ${{ matrix.artifact }}
           path: ${{ matrix.artifact }}.tar.gz
 
-  release:
+  publish:
     name: Create Release
     needs: [create-tag, build]
     runs-on: ubuntu-latest
+    environment: production
+    permissions:
+      contents: write
+      id-token: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
           ref: ${{ needs.create-tag.outputs.tag }}
 
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
         with:
           path: artifacts
 
@@ -181,10 +191,11 @@ jobs:
         run: |
           PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
           echo "tag=$PREV_TAG" >> $GITHUB_OUTPUT
+          echo "Previous tag: $PREV_TAG"
 
       - name: Build Changelog
         id: changelog
-        uses: mikepenz/release-changelog-builder-action@v5
+        uses: mikepenz/release-changelog-builder-action@a34a8009a9588bb86b02a873cf592440e96a5da8 # v6.1.1
         with:
           configurationJson: |
             {
@@ -203,10 +214,10 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2
         with:
           tag_name: ${{ needs.create-tag.outputs.tag }}
-          name: cnt ${{ needs.create-tag.outputs.tag }}
+          name: ${{ env.BINARY_NAME }} ${{ needs.create-tag.outputs.tag }}
           body: |
             ## Installation
 
@@ -223,7 +234,8 @@ jobs:
             ```bash
             tar -xzf cnt-*.tar.gz
             chmod +x cnt
-            ./cnt --help
+            sudo mv cnt /usr/local/bin/
+            cnt --help
             ```
 
             ${{ steps.changelog.outputs.changelog }}
@@ -236,22 +248,19 @@ jobs:
     needs: [create-tag, build]
     if: failure() && needs.create-tag.result == 'success'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           fetch-depth: 0
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Delete tag and revert commit
+      - name: Delete tag
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
           echo "Deleting tag ${{ needs.create-tag.outputs.tag }}..."
           git push --delete origin ${{ needs.create-tag.outputs.tag }} || true
-
-          echo "Reverting version bump commit ${{ needs.create-tag.outputs.commit_sha }}..."
-          git pull origin main
-          git revert ${{ needs.create-tag.outputs.commit_sha }} --no-edit
-          git push origin main
