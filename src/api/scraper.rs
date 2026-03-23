@@ -24,11 +24,22 @@ pub fn parse_search_results(html: &str, query: &str) -> Result<SearchResponse> {
 }
 
 fn extract_total_count(document: &Html) -> u32 {
-    let selector = Selector::parse("[data-gtm-results]").expect("valid selector");
-    document
-        .select(&selector)
+    // Search results use data-gtm-results, browse uses data-total-count on .grid-footer
+    let gtm_selector = Selector::parse("[data-gtm-results]").expect("valid selector");
+    if let Some(count) = document
+        .select(&gtm_selector)
         .next()
         .and_then(|el| el.value().attr("data-gtm-results"))
+        .and_then(|v| v.parse().ok())
+    {
+        return count;
+    }
+
+    let footer_selector = Selector::parse("[data-total-count]").expect("valid selector");
+    document
+        .select(&footer_selector)
+        .next()
+        .and_then(|el| el.value().attr("data-total-count"))
         .and_then(|v| v.parse().ok())
         .unwrap_or(0)
 }

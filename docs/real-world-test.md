@@ -482,7 +482,7 @@ CONTINENTE_CONFIG=/tmp/cnt_env.toml cnt categories | jq 'length'
 | product nutrition JSON | ✅ | Valid nested JSON |
 | product compact | ✅ | TSV output |
 | browse by name | ✅ | Fuzzy match works |
-| browse by cgid | ✅ | Returns products (total shows 0 — parsing limitation) |
+| browse by cgid | ✅ | Returns 185 products for laticinios-leite |
 | browse with sort | ✅ | Sort works |
 | browse pagination | ✅ | Page 2 differs from page 1 |
 | browse JSON | ✅ | Valid JSON |
@@ -518,5 +518,4 @@ CONTINENTE_CONFIG=/tmp/cnt_env.toml cnt categories | jq 'length'
 
 ### Known Issues
 
-- **Browse total count** — `browse` shows `total: 0` even when products are returned. The browse endpoint uses a different HTML structure for the total count than search.
-- **Unit-price sort** — Returns HTTP 500 for some queries (e.g., "azeite") but works for others. This is a Continente server-side issue.
+- **Unit-price sort** — Returns HTTP 500 from Continente's server for some queries ("azeite", "agua", "pao", "cafe", "vinho") but works for others ("leite", "cerveja", "arroz"). The sort rule name `price-per-capacity-ascending` is correct (confirmed in the HTML). This is a Continente server-side bug — the same URLs 500 via curl, not just our CLI.
