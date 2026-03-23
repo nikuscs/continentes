@@ -1,0 +1,73 @@
+[package]
+name = "continente"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "Fast CLI for browsing Continente online supermarket products, prices, nutrition, categories, and stores — LLM-ready, works with Claude Code, Codex, OpenClaw, and AI agents"
+license = "MIT"
+repository = "https://github.com/nikuscs/continentes"
+readme = "README.md"
+keywords = ["continente", "supermarket", "cli", "ai-agent", "llm"]
+categories = ["command-line-utilities"]
+
+[[bin]]
+name = "cnt"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { version = "1", features = ["full"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "cookies", "gzip", "brotli", "json"] }
+clap = { version = "4", features = ["derive", "env"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+scraper = "0.26"
+anyhow = "1"
+thiserror = "2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+chrono = { version = "0.4", features = ["serde"] }
+toml = "1"
+urlencoding = "2"
+
+[dev-dependencies]
+wiremock = "0.6"
+tokio-test = "0.4"
+tempfile = "3"
+assert_cmd = "2"
+
+[profile.dev]
+debug = 1
+
+[profile.dev.package."*"]
+opt-level = 1
+
+[profile.release]
+lto = true
+codegen-units = 1
+strip = true
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }
+pedantic = { level = "warn", priority = -1 }
+nursery = { level = "warn", priority = -1 }
+dbg_macro = "deny"
+todo = "deny"
+unimplemented = "deny"
+print_stdout = "deny"
+print_stderr = "deny"
+module_name_repetitions = "allow"
+must_use_candidate = "allow"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
+needless_pass_by_value = "allow"
+future_not_send = "allow"
+cast_possible_truncation = "allow"
+cast_possible_wrap = "allow"
+cast_sign_loss = "allow"
+format_push_string = "allow"
+return_self_not_must_use = "allow"
+unnecessary_debug_formatting = "allow"
+cast_precision_loss = "allow"

@@ -1,0 +1,10 @@
+# Continente CLI Configuration
+# Place at ./continente.toml or ~/.config/continente/continente.toml
+
+[http]
+timeout_secs = 30
+retries = 3
+delay_ms = 100
+
+[output]
+format = "table"   # table, json, compact

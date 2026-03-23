@@ -1,0 +1,9 @@
+# Decompiled APK output
+decompiled/
+
+# APK files
+*.apk
+*.xapk
+
+# Rust build
+target/
