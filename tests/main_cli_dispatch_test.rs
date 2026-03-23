@@ -28,7 +28,7 @@ fn categories_uses_configured_json_output() {
     let stdout = String::from_utf8_lossy(&assert.get_output().stdout);
     let parsed: serde_json::Value = serde_json::from_str(&stdout).unwrap();
     assert!(parsed.is_array());
-    assert_eq!(parsed.as_array().unwrap().len(), 91);
+    assert_eq!(parsed.as_array().unwrap().len(), 251);
 }
 
 #[test]

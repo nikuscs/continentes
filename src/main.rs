@@ -78,6 +78,14 @@ enum Commands {
         /// Show only organic products
         #[arg(long)]
         bio: bool,
+
+        /// Show only sugar-free products
+        #[arg(long)]
+        sugar_free: bool,
+
+        /// Show only vegetarian products
+        #[arg(long)]
+        vegetarian: bool,
     },
 
     /// Get full product details
@@ -136,6 +144,10 @@ enum Commands {
     /// List available categories
     #[command(alias = "cat")]
     Categories,
+
+    /// List current flyers and catalogs
+    #[command(alias = "f")]
+    Flyers,
 }
 
 #[tokio::main]
@@ -169,6 +181,8 @@ async fn main() -> Result<()> {
             gluten_free,
             lactose_free,
             bio,
+            sugar_free,
+            vegetarian,
         } => {
             let mut filters = Vec::new();
             if vegan {
@@ -182,6 +196,12 @@ async fn main() -> Result<()> {
             }
             if bio {
                 filters.push(("food.Biologic".to_string(), "true".to_string()));
+            }
+            if sugar_free {
+                filters.push(("food.SugarFree".to_string(), "true".to_string()));
+            }
+            if vegetarian {
+                filters.push(("food.Vegetarian".to_string(), "true".to_string()));
             }
 
             commands::search::run(
@@ -219,6 +239,8 @@ async fn main() -> Result<()> {
         }
 
         Commands::Categories => commands::categories::run(output_format),
+
+        Commands::Flyers => commands::flyers::run(&client, output_format).await?,
     };
 
     std::io::stdout().write_all(output.as_bytes())?;

@@ -251,7 +251,14 @@ fn format_functions_cover_remaining_match_arms() {
         country_of_origin: Some("Portugal".to_string()),
         storage_instructions: Some("Guardar em local fresco".to_string()),
         net_content: Some("1 L".to_string()),
+        net_content_uom: None,
+        net_weight: None,
         producer_name: Some("Continente".to_string()),
+        producer_address: None,
+        preparation_instructions: None,
+        daily_value_intake_reference: None,
+        serving_size: None,
+        serving_size_uom: None,
         nutrients: vec![Nutrient {
             name: "Energy".to_string(),
             value: 200.0,
@@ -269,6 +276,7 @@ fn format_functions_cover_remaining_match_arms() {
         phone: None,
         store_hours: None,
         is_pickup_store: true,
+        is_galp_store: false,
     }];
     let categories = continente::categories::all_categories();
     let suggestions = SuggestionResult {

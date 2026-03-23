@@ -1,7 +1,9 @@
 use std::fmt::{self, Write};
 use std::str::FromStr;
 
-use crate::api::models::{NutritionalInfo, ProductDetail, SearchResponse, Store, SuggestionResult};
+use crate::api::models::{
+    Flyer, NutritionalInfo, ProductDetail, SearchResponse, Store, SuggestionResult,
+};
 use crate::categories::Category;
 
 #[derive(
@@ -230,6 +232,28 @@ fn format_nutrition(info: &NutritionalInfo) -> String {
     if let Some(producer) = &info.producer_name {
         let _ = writeln!(out, "{:<16}{}", "Producer:", producer);
     }
+    if let Some(address) = &info.producer_address {
+        let _ = writeln!(out, "{:<16}{}", "Address:", truncate(address, 60));
+    }
+    if let Some(net) = &info.net_content {
+        let uom = info.net_content_uom.as_deref().unwrap_or("");
+        if !uom.is_empty() {
+            let _ = writeln!(out, "{:<16}{} {}", "Net Content:", net, uom);
+        }
+    }
+    if let Some(weight) = &info.net_weight {
+        let _ = writeln!(out, "{:<16}{}", "Net Weight:", weight);
+    }
+    if let Some(prep) = &info.preparation_instructions {
+        let _ = writeln!(out, "{:<16}{}", "Preparation:", truncate(prep, 60));
+    }
+    if let Some(serving) = &info.serving_size {
+        let uom = info.serving_size_uom.as_deref().unwrap_or("");
+        let _ = writeln!(out, "{:<16}{} {}", "Serving Size:", serving, uom);
+    }
+    if let Some(daily) = &info.daily_value_intake_reference {
+        let _ = writeln!(out, "{:<16}{}", "Daily Ref:", daily);
+    }
 
     if !info.nutrients.is_empty() {
         let _ = writeln!(out);
@@ -305,19 +329,20 @@ fn format_stores_table(stores: &[Store], radius: u32) -> String {
     let _ = writeln!(out, "Found {} stores within {}km:\n", stores.len(), radius);
     let _ = writeln!(
         out,
-        "{:<34} {:<40} {:<12} Pickup",
-        "Name", "Address", "City"
+        "{:<34} {:<40} {:<12} {:<8} Galp",
+        "Name", "Address", "City", "Pickup"
     );
-    let _ = writeln!(out, "{}", "-".repeat(95));
+    let _ = writeln!(out, "{}", "-".repeat(103));
 
     for s in stores {
         let _ = writeln!(
             out,
-            "{:<34} {:<40} {:<12} {}",
+            "{:<34} {:<40} {:<12} {:<8} {}",
             truncate(&s.name, 33),
             truncate(&s.address, 39),
             truncate(&s.city, 11),
-            if s.is_pickup_store { "Yes" } else { "No" }
+            if s.is_pickup_store { "Yes" } else { "No" },
+            if s.is_galp_store { "Yes" } else { "No" }
         );
     }
     out
@@ -381,6 +406,45 @@ fn format_categories_tree(categories: &[Category]) -> String {
         let _ = writeln!(out);
     }
 
+    out
+}
+
+// --- Flyers ---
+
+pub fn format_flyers(flyers: &[Flyer], format: OutputFormat) -> String {
+    match format {
+        OutputFormat::Json => serde_json::to_string_pretty(flyers).unwrap_or_default(),
+        OutputFormat::Table => format_flyers_table(flyers),
+        OutputFormat::Compact => {
+            let mut out = String::new();
+            for f in flyers {
+                let _ = writeln!(out, "{}\t{}\t{}", f.slug, f.title, f.url);
+            }
+            out
+        }
+    }
+}
+
+fn format_flyers_table(flyers: &[Flyer]) -> String {
+    let mut out = String::new();
+    let _ = writeln!(out, "Current flyers ({}):\n", flyers.len());
+    let _ = writeln!(out, "{:<32} {:<40} Dates", "Slug", "Title");
+    let _ = writeln!(out, "{}", "-".repeat(100));
+
+    for f in flyers {
+        let _ = writeln!(
+            out,
+            "{:<32} {:<40} {}",
+            truncate(&f.slug, 31),
+            truncate(&f.title, 39),
+            &f.description,
+        );
+    }
+
+    let _ = writeln!(
+        out,
+        "\nOpen a flyer: the URL points to the iPaper viewer at folhetos.continente.pt"
+    );
     out
 }
 

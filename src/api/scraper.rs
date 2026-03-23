@@ -1,7 +1,8 @@
 use scraper::{Html, Selector};
 
 use crate::api::models::{
-    CategorySuggestion, Nutrient, NutritionalInfo, SearchProduct, SearchResponse, SuggestionResult,
+    CategorySuggestion, Flyer, Nutrient, NutritionalInfo, SearchProduct, SearchResponse,
+    SuggestionResult,
 };
 use crate::error::{ContinenteError, Result};
 
@@ -124,7 +125,14 @@ pub fn parse_nutritional_info(html: &str) -> NutritionalInfo {
         country_of_origin: extract_text(&document, ".country-origin"),
         storage_instructions: extract_text(&document, ".storage-instruction"),
         net_content: extract_text(&document, ".net-content"),
+        net_content_uom: extract_text(&document, ".net-content--uom"),
+        net_weight: extract_text(&document, ".net-weight"),
         producer_name: extract_text(&document, ".contact-information--name"),
+        producer_address: extract_text(&document, ".contact-information--address"),
+        preparation_instructions: extract_text(&document, ".preparation-instructions"),
+        daily_value_intake_reference: extract_text(&document, ".daily-value-intake-reference"),
+        serving_size: extract_text(&document, ".serving-size"),
+        serving_size_uom: extract_text(&document, ".serving-size--uom"),
         nutrients: extract_nutrients(&document),
     }
 }
@@ -168,6 +176,68 @@ fn extract_nutrients(document: &Html) -> Vec<Nutrient> {
     }
 
     nutrients
+}
+
+#[allow(clippy::similar_names)]
+pub fn parse_flyers(html: &str) -> Result<Vec<Flyer>> {
+    let document = Html::parse_document(html);
+    let tile_selector = Selector::parse(".ipaper-tile").expect("valid selector");
+    let link_selector = Selector::parse("a.ipaper-tile--image-link").expect("valid selector");
+    let title_selector = Selector::parse(".ipaper-tile--title").expect("valid selector");
+    let desc_selector = Selector::parse(".ipaper-tile--description").expect("valid selector");
+    let img_selector = Selector::parse("img[data-src]").expect("valid selector");
+
+    let mut flyers = Vec::new();
+
+    for tile in document.select(&tile_selector) {
+        let Some(link) = tile.select(&link_selector).next() else {
+            continue;
+        };
+        let Some(url) = link.value().attr("href") else {
+            continue;
+        };
+
+        let title = tile
+            .select(&title_selector)
+            .next()
+            .map(|el| html_decode(el.text().collect::<String>().trim()))
+            .unwrap_or_default();
+
+        let description = tile
+            .select(&desc_selector)
+            .next()
+            .map(|el| html_decode(el.text().collect::<String>().trim()))
+            .unwrap_or_default();
+
+        let image_url = tile
+            .select(&img_selector)
+            .next()
+            .and_then(|el| el.value().attr("data-src").map(String::from));
+
+        let slug = extract_flyer_slug(url);
+
+        flyers.push(Flyer {
+            title,
+            description,
+            url: url.to_string(),
+            image_url,
+            slug,
+        });
+    }
+
+    if flyers.is_empty() {
+        return Err(ContinenteError::NoResults);
+    }
+
+    Ok(flyers)
+}
+
+fn extract_flyer_slug(url: &str) -> String {
+    url.trim_end_matches('/')
+        .rsplit('/')
+        .next()
+        .unwrap_or("")
+        .to_string()
 }
 
 fn html_decode(s: &str) -> String {

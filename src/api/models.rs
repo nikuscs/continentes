@@ -372,6 +372,8 @@ pub struct Store {
     pub store_hours: Option<String>,
     #[serde(default, alias = "isPickupStore")]
     pub is_pickup_store: bool,
+    #[serde(default, alias = "isGalpStore")]
+    pub is_galp_store: bool,
 }
 
 #[derive(Debug, Deserialize)]
@@ -390,7 +392,14 @@ pub struct NutritionalInfo {
     pub country_of_origin: Option<String>,
     pub storage_instructions: Option<String>,
     pub net_content: Option<String>,
+    pub net_content_uom: Option<String>,
+    pub net_weight: Option<String>,
     pub producer_name: Option<String>,
+    pub producer_address: Option<String>,
+    pub preparation_instructions: Option<String>,
+    pub daily_value_intake_reference: Option<String>,
+    pub serving_size: Option<String>,
+    pub serving_size_uom: Option<String>,
     pub nutrients: Vec<Nutrient>,
 }
 
@@ -399,6 +408,17 @@ pub struct Nutrient {
     pub name: String,
     pub value: f64,
     pub unit: String,
+}
+
+// --- Flyers ---
+
+#[derive(Debug, Clone, Serialize)]
+pub struct Flyer {
+    pub title: String,
+    pub description: String,
+    pub url: String,
+    pub image_url: Option<String>,
+    pub slug: String,
 }
 
 // --- Sort & Search Params ---

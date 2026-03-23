@@ -4,7 +4,7 @@
 [![Release](https://github.com/nikuscs/continentes/actions/workflows/release.yml/badge.svg)](https://github.com/nikuscs/continentes/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**Fast CLI for browsing [Continente online](https://www.continente.pt) supermarket products, optimized for LLM consumption. Works as a skill for [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Claude.ai](https://claude.ai), [OpenAI Codex](https://openai.com/index/openai-codex/), and any AI agent. Search products, compare prices, inspect nutritional info, browse categories, and find nearby stores from the terminal.**
+**Fast CLI for browsing [Continente online](https://www.continente.pt) supermarket products, optimized for LLM consumption. Works as a skill for [Claude Code](https://docs.anthropic.com/en/docs/claude-code), [Claude.ai](https://claude.ai), [OpenAI Codex](https://openai.com/index/openai-codex/), [OpenClaw](https://github.com/openclaw/openclaw), and any AI agent. Search products, compare prices, inspect nutritional info, browse categories, and find nearby stores — with product ordering planned for the future.**
 
 > **Disclaimer:** This project is for **educational purposes and AI automation research only**.
 > The authors are not responsible for any misuse or for any damages resulting from the use of this tool.
@@ -19,9 +19,11 @@
 
 - Search 50,000+ products with brand, price, and dietary filters
 - Full product details with EAN/barcode, nutritional info, and allergens
-- Browse 91 product categories
+- Browse 251 product categories (14 top-level, ~100 L2, ~137 L3)
+- Current weekly flyers and catalogs (iPaper integration)
 - Search autocomplete suggestions
 - Find 228 stores across Portugal with GPS coordinates
+- 6 dietary filters: vegan, vegetarian, gluten-free, lactose-free, sugar-free, bio
 - Multiple output formats: table, JSON, compact (TSV)
 - No authentication required
 
@@ -109,6 +111,13 @@ cnt categories            # tree view
 cnt categories --format json  # machine-readable
 ```
 
+### Browse flyers
+
+```bash
+cnt flyers                    # current weekly flyers
+cnt flyers --format json      # machine-readable
+```
+
 ## Output formats
 
 ```bash
@@ -130,8 +139,10 @@ cnt search "leite" --format compact | sort -t$'\t' -k2 -n
 | Flag | Description |
 |------|-------------|
 | `--vegan` | Vegan products only |
+| `--vegetarian` | Vegetarian products only |
 | `--gluten-free` | Gluten-free only |
 | `--lactose-free` | Lactose-free only |
+| `--sugar-free` | Sugar-free only |
 | `--bio` | Organic/biological only |
 
 ## Sort options
@@ -167,11 +178,62 @@ format = "table"   # table, json, compact
 | `-v, --verbose` | | Debug logging |
 | `--config <PATH>` | `CONTINENTE_CONFIG` | Config file path |
 
+## AI Agents
+
+If you are an AI agent (Claude Code, Claude.ai, OpenAI Codex, OpenClaw, or any tool-calling agent), you can use `cnt` as a skill to search Portuguese supermarket products. Download the binary and call it directly from your tool/shell integration. A `SKILL.md` file is included for Claude Code skill registration.
+
+### Quick setup
+
+Download the pre-compiled binary for your platform from [Releases](https://github.com/nikuscs/continentes/releases) and place it in your `PATH`.
+
+### Searching products
+
+```bash
+# Search with JSON output for parsing
+cnt search "leite" --format json
+
+# Filter by dietary requirements
+cnt search "queijo" --vegan --format json
+
+# Get full product details with nutrition
+cnt product 6879912 --nutrition --format json
+
+# Find cheapest option
+cnt search "azeite" --sort unit-price --format json
+```
+
+### Building a shopping list
+
+```bash
+# Search multiple products and extract prices
+cnt search "leite" --format json | jq '.products[:3] | .[] | {id, name, price}'
+cnt search "pão" --format json | jq '.products[:3] | .[] | {id, name, price}'
+```
+
+### Finding stores
+
+```bash
+# Find nearest stores to coordinates
+cnt stores --lat 38.7 --lon -9.1 --format json | jq '.[0] | {name, address, city}'
+```
+
+### Tips for agents
+
+- Use `--format json` for structured output you can parse
+- Product IDs are numeric strings (e.g., `6879912`) — extract from search results
+- Use `--nutrition` flag on `product` command for full nutritional data
+- Use `--sort unit-price` for best value comparisons
+- Dietary filters can be combined: `--vegan --gluten-free --bio`
+- Categories use internal `cgid` values — use `cnt categories --format json` to get the mapping
+- No authentication needed — all endpoints are public
+
+Feel free to copy and adapt this tool's interface into your own skill definitions or MCP server configurations.
+
 ## How it works
 
 The CLI interacts with Continente's Salesforce Commerce Cloud (SFCC) storefront controllers. These are the same endpoints the website uses — no private APIs, no authentication, no scraping of rendered pages. Product data is extracted from structured `data-` attributes and JSON responses.
 
-See [`docs/investigation.md`](docs/investigation.md) for the full reverse engineering investigation.
+All endpoint details are documented inline in `src/api/client.rs`.
 
 ## Related Projects
 

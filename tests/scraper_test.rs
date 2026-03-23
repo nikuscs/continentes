@@ -1,4 +1,5 @@
 use continente::api::models::{ProductVariationResponse, StoresResponse};
+use continente::api::parse_flyers;
 
 #[test]
 fn parse_search_html_extracts_products() {
@@ -88,4 +89,54 @@ fn deserialize_stores_json() {
     let store = &response.stores[0];
     assert!(!store.id.is_empty());
     assert!(!store.name.is_empty());
+}
+
+#[test]
+fn parse_flyers_html_extracts_flyers() {
+    let html = r#"
+    <div class="ipaper-tile">
+        <a class="ipaper-tile--image-link" href="https://folhetos.continente.pt/semanal-12/">
+            <img data-src="https://b-cdn.ipaper.io/cover.jpg" />
+        </a>
+        <div class="ipaper-tile--title">Folheto Semanal</div>
+        <div class="ipaper-tile--description">18 mar - 24 mar</div>
+    </div>
+    <div class="ipaper-tile">
+        <a class="ipaper-tile--image-link" href="https://folhetos.continente.pt/fim-de-semana/">
+        </a>
+        <div class="ipaper-tile--title">Fim de Semana</div>
+        <div class="ipaper-tile--description">21 mar - 23 mar</div>
+    </div>
+    "#;
+    let flyers = parse_flyers(html).unwrap();
+    assert_eq!(flyers.len(), 2);
+    assert_eq!(flyers[0].title, "Folheto Semanal");
+    assert_eq!(flyers[0].slug, "semanal-12");
+    assert!(flyers[0].image_url.is_some());
+    assert_eq!(flyers[1].title, "Fim de Semana");
+    assert!(flyers[1].image_url.is_none());
+}
+
+#[test]
+fn parse_flyers_empty_html_returns_error() {
+    let result = parse_flyers("<html></html>");
+    assert!(result.is_err());
+}
+
+#[test]
+fn parse_flyers_tile_without_link_is_skipped() {
+    let html = r#"
+    <div class="ipaper-tile">
+        <div class="ipaper-tile--title">No Link</div>
+    </div>
+    <div class="ipaper-tile">
+        <a class="ipaper-tile--image-link" href="https://folhetos.continente.pt/valid/">
+        </a>
+        <div class="ipaper-tile--title">Valid</div>
+        <div class="ipaper-tile--description">dates</div>
+    </div>
+    "#;
+    let flyers = parse_flyers(html).unwrap();
+    assert_eq!(flyers.len(), 1);
+    assert_eq!(flyers[0].title, "Valid");
 }

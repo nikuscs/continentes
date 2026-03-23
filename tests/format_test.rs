@@ -1,11 +1,11 @@
 use continente::api::models::{
-    BadgeInfo, CategoryInfo, Nutrient, NutritionalInfo, PriceInfo, PricePerUnit, ProductDetail,
-    ProductImages, SearchProduct, SearchResponse, Store, SuggestionResult,
+    BadgeInfo, CategoryInfo, Flyer, Nutrient, NutritionalInfo, PriceInfo, PricePerUnit,
+    ProductDetail, ProductImages, SearchProduct, SearchResponse, Store, SuggestionResult,
 };
 use continente::categories::all_categories;
 use continente::format::{
-    OutputFormat, format_categories, format_product_detail, format_products, format_stores,
-    format_suggestions,
+    OutputFormat, format_categories, format_flyers, format_product_detail, format_products,
+    format_stores, format_suggestions,
 };
 
 fn sample_search_response() -> SearchResponse {
@@ -119,7 +119,14 @@ fn format_product_detail_shows_promotion_and_nutrition() {
         country_of_origin: Some("Portugal".to_string()),
         storage_instructions: None,
         net_content: None,
+        net_content_uom: None,
+        net_weight: None,
         producer_name: None,
+        producer_address: None,
+        preparation_instructions: None,
+        daily_value_intake_reference: None,
+        serving_size: None,
+        serving_size_uom: None,
         nutrients: vec![Nutrient {
             name: "Proteína".to_string(),
             value: 3.4,
@@ -150,6 +157,7 @@ fn format_stores_table_shows_pickup() {
         phone: None,
         store_hours: None,
         is_pickup_store: true,
+        is_galp_store: false,
     }];
 
     let output = format_stores(&stores, 10, OutputFormat::Table);
@@ -175,4 +183,48 @@ fn format_suggestions_json_is_valid() {
     let output = format_suggestions(&suggestions, OutputFormat::Json);
     let parsed: serde_json::Value = serde_json::from_str(&output).unwrap();
     assert_eq!(parsed["popular_terms"][0], "leite magro");
+}
+
+fn sample_flyers() -> Vec<Flyer> {
+    vec![
+        Flyer {
+            title: "Folheto Semanal".to_string(),
+            description: "18 mar - 24 mar".to_string(),
+            url: "https://folhetos.continente.pt/semanal-12-jeu9/".to_string(),
+            image_url: Some("https://b-cdn.ipaper.io/cover.jpg".to_string()),
+            slug: "semanal-12-jeu9".to_string(),
+        },
+        Flyer {
+            title: "Fim de Semana".to_string(),
+            description: "21 mar - 23 mar".to_string(),
+            url: "https://folhetos.continente.pt/fim-de-semana-s12/".to_string(),
+            image_url: None,
+            slug: "fim-de-semana-s12".to_string(),
+        },
+    ]
+}
+
+#[test]
+fn format_flyers_table_shows_titles() {
+    let output = format_flyers(&sample_flyers(), OutputFormat::Table);
+    assert!(output.contains("Folheto Semanal"));
+    assert!(output.contains("Fim de Semana"));
+    assert!(output.contains("semanal-12-jeu9"));
+    assert!(output.contains("iPaper"));
+}
+
+#[test]
+fn format_flyers_json_is_valid() {
+    let output = format_flyers(&sample_flyers(), OutputFormat::Json);
+    let parsed: serde_json::Value = serde_json::from_str(&output).unwrap();
+    assert!(parsed.is_array());
+    assert_eq!(parsed.as_array().unwrap().len(), 2);
+    assert_eq!(parsed[0]["slug"], "semanal-12-jeu9");
+}
+
+#[test]
+fn format_flyers_compact_tsv() {
+    let output = format_flyers(&sample_flyers(), OutputFormat::Compact);
+    assert!(output.contains("semanal-12-jeu9\tFolheto Semanal\t"));
+    assert!(output.contains("fim-de-semana-s12\tFim de Semana\t"));
 }
