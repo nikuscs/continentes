@@ -186,22 +186,37 @@ async fn main() -> Result<()> {
         } => {
             let mut filters = Vec::new();
             if vegan {
-                filters.push(("food.Vegan".to_string(), "true".to_string()));
+                filters.push(("food.Vegan".to_string(), "Produto Vegan".to_string()));
             }
             if gluten_free {
-                filters.push(("food.GlutenFree".to_string(), "true".to_string()));
+                filters.push((
+                    "food.GlutenFree".to_string(),
+                    "Produto Sem Gl\u{fa}ten".to_string(),
+                ));
             }
             if lactose_free {
-                filters.push(("food.LactoseFree".to_string(), "true".to_string()));
+                filters.push((
+                    "food.LactoseFree".to_string(),
+                    "Produto Sem Lactose".to_string(),
+                ));
             }
             if bio {
-                filters.push(("food.Biologic".to_string(), "true".to_string()));
+                filters.push((
+                    "food.Biologic".to_string(),
+                    "Produto Biol\u{f3}gico".to_string(),
+                ));
             }
             if sugar_free {
-                filters.push(("food.SugarFree".to_string(), "true".to_string()));
+                filters.push((
+                    "food.SugarFree".to_string(),
+                    "Produto Sem Adi\u{e7}\u{e3}o de A\u{e7}\u{fa}car".to_string(),
+                ));
             }
             if vegetarian {
-                filters.push(("food.Vegetarian".to_string(), "true".to_string()));
+                filters.push((
+                    "food.Vegetarian".to_string(),
+                    "Produto Vegetariano".to_string(),
+                ));
             }
 
             commands::search::run(

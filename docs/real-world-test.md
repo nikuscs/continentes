@@ -469,13 +469,13 @@ CONTINENTE_CONFIG=/tmp/cnt_env.toml cnt categories | jq 'length'
 | search sort name-asc | ✅ | A-Z sort works |
 | search sort name-desc | ✅ | Z-A sort works |
 | search pagination | ✅ | Page 2 returns different results |
-| search combined filters | ⚠️ | No results — dietary filters return 0 from Continente API |
-| --vegan | ⚠️ | API returns 0 results for all tested queries |
-| --vegetarian | ⚠️ | API returns 0 results for all tested queries |
-| --gluten-free | ⚠️ | API returns 0 results for all tested queries |
-| --lactose-free | ⚠️ | API returns 0 results for all tested queries |
-| --sugar-free | ⚠️ | API returns 0 results for all tested queries |
-| --bio | ⚠️ | API returns 0 results for all tested queries |
+| search combined filters | ✅ | vegan+bio: 25 results, vegan+gluten-free: 5 results |
+| --vegan | ✅ | 78 results for "leite" (coconut milk, etc.) |
+| --vegetarian | ✅ | 18 results for "hamburguer" |
+| --gluten-free | ✅ | 124 results for "bolachas" |
+| --lactose-free | ✅ | 44 results for "queijo" |
+| --sugar-free | ✅ | 108 results for "bolachas" |
+| --bio | ✅ | 83 results for "leite" |
 | product basic | ✅ | Full details with EAN, rating, category path |
 | product JSON | ✅ | Valid JSON with all fields |
 | product nutrition | ✅ | Ingredients, allergens, nutrients table |
@@ -512,12 +512,11 @@ CONTINENTE_CONFIG=/tmp/cnt_env.toml cnt categories | jq 'length'
 | empty search results | ✅ | "No results found" with exit code 1 |
 | invalid config path | ✅ | "Config file not found" with exit code 1 |
 | special characters | ✅ | "pão de forma" returns bread products |
-| multiple dietary filters | ⚠️ | Filters sent correctly but API returns 0 |
+| multiple dietary filters | ✅ | vegan+bio returns 25, vegan+gluten-free returns 5 |
 | negative longitude | ✅ | Lisbon stores returned |
 | command aliases | ✅ | All 7 aliases work (s, p, b, sg, st, cat, f) |
 
 ### Known Issues
 
-- **Dietary filters** (`--vegan`, `--bio`, etc.) — The `prefn/prefv` filter parameters are sent correctly to the API but Continente's server returns 0 results for all tested combinations. The filter attribute names (`food.Vegan`, `food.Biologic`, etc.) still appear in the HTML, so this may be a server-side regression or the filters may only work on specific category pages. Parameters are correctly formatted per the original investigation.
 - **Browse total count** — `browse` shows `total: 0` even when products are returned. The browse endpoint uses a different HTML structure for the total count than search.
 - **Unit-price sort** — Returns HTTP 500 for some queries (e.g., "azeite") but works for others. This is a Continente server-side issue.
