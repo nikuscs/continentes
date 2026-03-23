@@ -2,7 +2,7 @@
 
 Manual verification checklist for cnt CLI. Run against live Continente APIs.
 
-**Last tested:** —
+**Last tested:** 2026-03-23
 
 ---
 
@@ -55,6 +55,23 @@ cnt search "leite" --sort price-low-to-high --format compact | head -10
 cnt search "azeite" --sort unit-price
 ```
 - [ ] Results sorted by price per kg/lt
+
+### `search` — Sort by price high to low
+```bash
+cnt search "vinho" --sort price-high-to-low --format compact | head -5
+```
+- [ ] Results sorted most expensive first
+
+### `search` — Sort by name
+```bash
+cnt search "leite" --sort name-asc --max 10
+```
+- [ ] Results sorted A-Z by name
+
+```bash
+cnt search "leite" --sort name-desc --max 10
+```
+- [ ] Results sorted Z-A by name
 
 ### `search` — Pagination
 ```bash
@@ -146,6 +163,12 @@ cnt product 6879912 --nutrition --format json | jq '.nutrition.nutrients | lengt
 - [ ] Valid JSON with nutrition nested object
 - [ ] Nutrients array populated
 
+### `product` — Compact format
+```bash
+cnt product 6879912 --format compact
+```
+- [ ] Compact output rendered
+
 ---
 
 ## Browse Categories
@@ -176,6 +199,18 @@ cnt browse laticinios-leite --page 2 --max 12
 ```
 - [ ] Page 2 results differ from page 1
 
+### `browse` — JSON format
+```bash
+cnt browse laticinios-leite --format json | jq '.total'
+```
+- [ ] Valid JSON with products and total
+
+### `browse` — Compact format
+```bash
+cnt browse laticinios-leite --format compact | head -5
+```
+- [ ] Tab-separated values
+
 ---
 
 ## Suggestions
@@ -192,6 +227,12 @@ cnt suggest "arroz"
 cnt suggest "leite" --format json | jq 'keys'
 ```
 - [ ] Valid JSON with products, categories, popular_terms
+
+### `suggest` — Compact format
+```bash
+cnt suggest "leite" --format compact
+```
+- [ ] Tab-separated output
 
 ### `suggest` — Short query rejected
 ```bash
@@ -248,6 +289,12 @@ cnt categories --format json | jq 'length'
 ```
 - [ ] Returns 251 categories
 - [ ] Each has cgid, name, parent fields
+
+### `categories` — Compact format
+```bash
+cnt categories --format compact | head -5
+```
+- [ ] Tab-separated cgid and name
 
 ### `categories` — Known categories present
 ```bash
@@ -385,54 +432,92 @@ cnt stores --lat 38.7 --lon -9.1
 - [ ] Negative longitude handled correctly
 - [ ] Returns Lisbon-area stores
 
+### Command aliases
+```bash
+cnt s "leite" --max 3
+cnt p 6879912
+cnt b laticinios-leite --max 3
+cnt sg "leite"
+cnt st --lat 38.7 --lon -9.1
+cnt cat --format json | jq 'length'
+cnt f
+```
+- [ ] All aliases work identically to full command names
+
+### CONTINENTE_CONFIG env var
+```bash
+printf '[output]\nformat = "json"\n' > /tmp/cnt_env.toml
+CONTINENTE_CONFIG=/tmp/cnt_env.toml cnt categories | jq 'length'
+```
+- [ ] Env var sets config path
+- [ ] Returns 251 categories as JSON
+
 ---
 
-## Results
+## Results from 2026-03-23 testing
 
 | Test | Status | Notes |
 |------|--------|-------|
-| search basic | | |
-| search JSON | | |
-| search compact | | |
-| search brand filter | | |
-| search price range | | |
-| search sort price | | |
-| search pagination | | |
-| search combined filters | | |
-| --vegan | | |
-| --vegetarian | | |
-| --gluten-free | | |
-| --lactose-free | | |
-| --sugar-free | | |
-| --bio | | |
-| product basic | | |
-| product JSON | | |
-| product nutrition | | |
-| product nutrition JSON | | |
-| browse by name | | |
-| browse by cgid | | |
-| browse with sort | | |
-| suggest basic | | |
-| suggest JSON | | |
-| suggest short query | | |
-| stores Lisbon | | |
-| stores Porto radius | | |
-| stores JSON | | |
-| stores all Portugal | | |
-| categories tree | | |
-| categories JSON (251) | | |
-| categories top-level (14) | | |
-| flyers list | | |
-| flyers JSON | | |
-| flyers compact | | |
-| all formats JSON valid | | |
-| all formats compact | | |
-| config file loading | | |
-| CLI overrides config | | |
-| verbose logging | | |
-| invalid product ID | | |
-| empty search results | | |
-| invalid config path | | |
-| special characters | | |
-| multiple dietary filters | | |
-| negative longitude | | |
+| search basic | ✅ | 1313 results for "leite", correct table |
+| search JSON | ✅ | Valid JSON, jq parses |
+| search compact | ✅ | Tab-separated, pipeable |
+| search brand filter | ✅ | 26 results for "cerveja" + Super Bock |
+| search price range | ✅ | 159 results for "arroz" 1-3€ |
+| search sort price low-to-high | ✅ | Cheapest first (0.59€) |
+| search sort price high-to-low | ✅ | Most expensive first (9472€ Macallan) |
+| search sort unit-price | ✅ | Works for "leite", 500 on some queries (API issue) |
+| search sort name-asc | ✅ | A-Z sort works |
+| search sort name-desc | ✅ | Z-A sort works |
+| search pagination | ✅ | Page 2 returns different results |
+| search combined filters | ⚠️ | No results — dietary filters return 0 from Continente API |
+| --vegan | ⚠️ | API returns 0 results for all tested queries |
+| --vegetarian | ⚠️ | API returns 0 results for all tested queries |
+| --gluten-free | ⚠️ | API returns 0 results for all tested queries |
+| --lactose-free | ⚠️ | API returns 0 results for all tested queries |
+| --sugar-free | ⚠️ | API returns 0 results for all tested queries |
+| --bio | ⚠️ | API returns 0 results for all tested queries |
+| product basic | ✅ | Full details with EAN, rating, category path |
+| product JSON | ✅ | Valid JSON with all fields |
+| product nutrition | ✅ | Ingredients, allergens, nutrients table |
+| product nutrition JSON | ✅ | Valid nested JSON |
+| product compact | ✅ | TSV output |
+| browse by name | ✅ | Fuzzy match works |
+| browse by cgid | ✅ | Returns products (total shows 0 — parsing limitation) |
+| browse with sort | ✅ | Sort works |
+| browse pagination | ✅ | Page 2 differs from page 1 |
+| browse JSON | ✅ | Valid JSON |
+| browse compact | ✅ | TSV output |
+| suggest basic | ✅ | Returns product suggestions |
+| suggest JSON | ✅ | Valid JSON with products, categories, popular_terms |
+| suggest compact | ✅ | TSV output |
+| suggest short query | ✅ | Error with exit code 1 |
+| stores Lisbon | ✅ | 24 stores, shows pickup + galp columns |
+| stores Porto radius | ✅ | Radius filter works |
+| stores JSON | ✅ | All fields including is_galp_store |
+| stores all Portugal | ✅ | 228 stores |
+| categories tree | ✅ | Hierarchical tree with 14 top-level |
+| categories JSON (251) | ✅ | 251 categories |
+| categories compact | ✅ | TSV cgid + name |
+| categories top-level (14) | ✅ | 14 top-level (parent: null) |
+| flyers list | ✅ | 11 current flyers with dates |
+| flyers JSON | ✅ | Valid JSON with title, description, url, slug, image_url |
+| flyers compact | ✅ | TSV slug + title + URL |
+| all formats JSON valid | ✅ | All 7 commands produce valid JSON |
+| all formats compact | ✅ | All produce TSV |
+| config file loading | ✅ | Config sets default format |
+| CLI overrides config | ✅ | --format table overrides config JSON |
+| CONTINENTE_CONFIG env var | ✅ | Env var works |
+| verbose logging | ✅ | DEBUG logs on stderr |
+| invalid product ID | ✅ | Error with exit code 1 |
+| empty search results | ✅ | "No results found" with exit code 1 |
+| invalid config path | ✅ | "Config file not found" with exit code 1 |
+| special characters | ✅ | "pão de forma" returns bread products |
+| multiple dietary filters | ⚠️ | Filters sent correctly but API returns 0 |
+| negative longitude | ✅ | Lisbon stores returned |
+| command aliases | ✅ | All 7 aliases work (s, p, b, sg, st, cat, f) |
+
+### Known Issues
+
+- **Dietary filters** (`--vegan`, `--bio`, etc.) — The `prefn/prefv` filter parameters are sent correctly to the API but Continente's server returns 0 results for all tested combinations. The filter attribute names (`food.Vegan`, `food.Biologic`, etc.) still appear in the HTML, so this may be a server-side regression or the filters may only work on specific category pages. Parameters are correctly formatted per the original investigation.
+- **Browse total count** — `browse` shows `total: 0` even when products are returned. The browse endpoint uses a different HTML structure for the total count than search.
+- **Unit-price sort** — Returns HTTP 500 for some queries (e.g., "azeite") but works for others. This is a Continente server-side issue.

@@ -160,14 +160,14 @@ impl ContinenteClient {
             .query(&[("q", query)])
             .query(&[("cgid", "col-produtos")])
             .query(&[("start", &params.start.to_string())])
-            .query(&[("sz", &params.size.to_string())])
-            .query(&[("pmin", "0.01")]);
+            .query(&[("sz", &params.size.to_string())]);
+
+        // Only add default pmin if user didn't specify one (avoids duplicate param → 500)
+        let pmin = params.price_min.unwrap_or(0.01);
+        request = request.query(&[("pmin", &pmin.to_string())]);
 
         if let Some(sort) = &params.sort {
             request = request.query(&[("srule", sort.as_str())]);
-        }
-        if let Some(pmin) = params.price_min {
-            request = request.query(&[("pmin", &pmin.to_string())]);
         }
         if let Some(pmax) = params.price_max {
             request = request.query(&[("pmax", &pmax.to_string())]);
