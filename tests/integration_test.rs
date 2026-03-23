@@ -52,6 +52,15 @@ async fn real_suggest_returns_results() {
 
 #[tokio::test]
 #[ignore = "requires network"]
+async fn real_browse_returns_products() {
+    let client = ContinenteClient::new(&HttpConfig::default()).unwrap();
+    let params = SearchParams::new();
+    let result = client.browse("laticinios-leite", &params).await;
+    assert!(result.is_ok(), "Browse failed: {result:?}");
+}
+
+#[tokio::test]
+#[ignore = "requires network"]
 async fn real_nutrition_returns_data() {
     let client = ContinenteClient::new(&HttpConfig::default()).unwrap();
     let result = client

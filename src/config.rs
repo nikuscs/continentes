@@ -3,6 +3,8 @@ use std::path::{Path, PathBuf};
 use serde::Deserialize;
 use tracing::{debug, warn};
 
+use crate::format::OutputFormat;
+
 #[derive(Debug, Clone, Default, Deserialize)]
 #[serde(default)]
 pub struct Config {
@@ -21,7 +23,7 @@ pub struct HttpConfig {
 #[derive(Debug, Clone, Deserialize)]
 #[serde(default)]
 pub struct OutputConfig {
-    pub format: String,
+    pub format: OutputFormat,
 }
 
 impl Default for HttpConfig {
@@ -37,56 +39,56 @@ impl Default for HttpConfig {
 impl Default for OutputConfig {
     fn default() -> Self {
         Self {
-            format: String::from("table"),
+            format: OutputFormat::Table,
         }
     }
 }
 
-impl Config {
-    pub fn load(explicit_path: Option<&Path>) -> Self {
-        if let Some(path) = explicit_path {
-            return Self::load_from_file(path).unwrap_or_else(|e| {
-                warn!("Failed to load config from {}: {e}", path.display());
-                Self::default()
-            });
-        }
+fn user_config_path() -> Option<PathBuf> {
+    std::env::var_os("HOME").map(PathBuf::from).map(|home| {
+        home.join(".config")
+            .join("continente")
+            .join("continente.toml")
+    })
+}
 
-        let candidates = Self::config_candidates();
-        for path in candidates {
-            if path.exists() {
-                debug!("Loading config from {}", path.display());
-                match Self::load_from_file(&path) {
-                    Ok(config) => return config,
-                    Err(e) => {
-                        warn!("Failed to parse {}: {e}", path.display());
-                        return Self::default();
-                    }
-                }
-            }
+pub fn try_load(path: &Path) -> anyhow::Result<Option<Config>> {
+    match std::fs::read_to_string(path) {
+        Ok(contents) => {
+            let config: Config = toml::from_str(&contents)
+                .map_err(|e| anyhow::anyhow!("Failed to parse {}: {e}", path.display()))?;
+            Ok(Some(config))
         }
+        Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(None),
+        Err(e) => Err(e.into()),
+    }
+}
 
-        debug!("No config file found, using defaults");
-        Self::default()
+pub fn load_config(explicit_path: Option<&Path>) -> anyhow::Result<Config> {
+    if let Some(path) = explicit_path {
+        return match try_load(path) {
+            Ok(Some(config)) => Ok(config),
+            Ok(None) => Err(anyhow::anyhow!("Config file not found: {}", path.display())),
+            Err(e) => Err(e.context(format!("Failed to load config from {}", path.display()))),
+        };
     }
 
-    fn load_from_file(path: &Path) -> anyhow::Result<Self> {
-        let contents = std::fs::read_to_string(path)?;
-        let config: Self = toml::from_str(&contents)?;
-        Ok(config)
+    let local = Path::new("continente.toml");
+    match try_load(local) {
+        Ok(Some(config)) => return Ok(config),
+        Ok(None) => {}
+        Err(e) => warn!("Failed to parse {}: {e}", local.display()),
     }
 
-    fn config_candidates() -> Vec<PathBuf> {
-        let mut candidates = vec![PathBuf::from("continente.toml")];
-
-        if let Ok(home) = std::env::var("HOME") {
-            candidates.push(
-                PathBuf::from(home)
-                    .join(".config")
-                    .join("continente")
-                    .join("continente.toml"),
-            );
+    if let Some(user_path) = user_config_path() {
+        debug!("Checking user config path {}", user_path.display());
+        match try_load(&user_path) {
+            Ok(Some(config)) => return Ok(config),
+            Ok(None) => {}
+            Err(e) => warn!("Failed to parse {}: {e}", user_path.display()),
         }
-
-        candidates
     }
+
+    debug!("No config file found, using defaults");
+    Ok(Config::default())
 }

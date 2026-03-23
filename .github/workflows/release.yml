@@ -37,7 +37,7 @@ jobs:
         with:
           toolchain: stable
           components: rustfmt, clippy
-      - uses: Swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5 # v2.8.2
+      - uses: Swatinem/rust-cache@c19371144df3bb44fab255c43d04cbc2ab54d1c4 # v2.9.1
       - name: Format
         run: cargo fmt --all -- --check
       - name: Clippy
@@ -148,7 +148,7 @@ jobs:
           targets: ${{ matrix.target }}
 
       - name: Cache
-        uses: Swatinem/rust-cache@779680da715d629ac1d338a641029a2f4372abb5 # v2.8.2
+        uses: Swatinem/rust-cache@c19371144df3bb44fab255c43d04cbc2ab54d1c4 # v2.9.1
         with:
           key: release-${{ matrix.target }}
 
@@ -182,7 +182,7 @@ jobs:
           ref: ${{ needs.create-tag.outputs.tag }}
 
       - name: Download artifacts
-        uses: actions/download-artifact@70fc10c6e5e1ce46ad2ea6f2b72d43f7d47b13c3 # v8.0.0
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
         with:
           path: artifacts
 
@@ -202,6 +202,7 @@ jobs:
               "categories": [
                 { "title": "## Features", "labels": ["feature", "enhancement"] },
                 { "title": "## Bug Fixes", "labels": ["bug", "fix"] },
+                { "title": "## Documentation", "labels": ["documentation", "docs"] },
                 { "title": "## Other Changes", "labels": [] }
               ],
               "template": "#{{CHANGELOG}}\n\n**Full Changelog**: #{{RELEASE_DIFF}}",
@@ -214,7 +215,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release
-        uses: softprops/action-gh-release@a06a81a03ee405af7f2048a818ed3f03bbf83c7b # v2
+        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2
         with:
           tag_name: ${{ needs.create-tag.outputs.tag }}
           name: ${{ env.BINARY_NAME }} ${{ needs.create-tag.outputs.tag }}

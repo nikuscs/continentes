@@ -1,14 +1,49 @@
-use std::fmt::Write;
+use std::fmt::{self, Write};
+use std::str::FromStr;
 
 use crate::api::models::{NutritionalInfo, ProductDetail, SearchResponse, Store, SuggestionResult};
 use crate::categories::Category;
 
-#[derive(Debug, Clone, Copy, Default, clap::ValueEnum)]
+#[derive(
+    Debug,
+    Clone,
+    Copy,
+    Default,
+    PartialEq,
+    Eq,
+    clap::ValueEnum,
+    serde::Serialize,
+    serde::Deserialize,
+)]
+#[serde(rename_all = "lowercase")]
 pub enum OutputFormat {
     #[default]
     Table,
     Json,
     Compact,
+}
+
+impl fmt::Display for OutputFormat {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Table => f.write_str("table"),
+            Self::Json => f.write_str("json"),
+            Self::Compact => f.write_str("compact"),
+        }
+    }
+}
+
+impl FromStr for OutputFormat {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s.to_lowercase().as_str() {
+            "table" => Ok(Self::Table),
+            "json" => Ok(Self::Json),
+            "compact" => Ok(Self::Compact),
+            other => Err(format!("Unknown output format: '{other}'")),
+        }
+    }
 }
 
 // --- Search Products ---
@@ -44,7 +79,7 @@ fn format_products_table(response: &SearchResponse, page: u32, size: u32) -> Str
         let unit = p.unit_price.as_deref().unwrap_or("");
         let _ = writeln!(
             out,
-            "{:<10} {:<48} {:>6.2}e {:<12} {}",
+            "{:<10} {:<48} {:>6.2}€ {:<12} {}",
             p.id,
             truncate(&p.name, 47),
             p.price,
@@ -117,7 +152,7 @@ fn format_product_table(product: &ProductDetail, nutrition: Option<&NutritionalI
         let discount = ((1.0 - product.price.sales_value / list) * 100.0) as i32;
         let _ = writeln!(
             out,
-            "{:<14}{} (was {:.2}e, -{}%)",
+            "{:<14}{} (was {:.2}€, -{}%)",
             "Price:", product.price.sales_formatted, list, discount
         );
     } else {
@@ -228,7 +263,7 @@ fn format_suggestions_table(result: &SuggestionResult) -> String {
     if !result.products.is_empty() {
         let _ = writeln!(out, "Products:");
         for p in &result.products {
-            let _ = writeln!(out, "  {:<10} {:>6.2}e  {}", p.id, p.price, p.name);
+            let _ = writeln!(out, "  {:<10} {:>6.2}€  {}", p.id, p.price, p.name);
         }
     }
 
@@ -354,8 +389,8 @@ fn format_categories_tree(categories: &[Category]) -> String {
 fn truncate(s: &str, max: usize) -> String {
     if s.chars().count() > max {
         format!(
-            "{}...",
-            s.chars().take(max.saturating_sub(3)).collect::<String>()
+            "{}…",
+            s.chars().take(max.saturating_sub(1)).collect::<String>()
         )
     } else {
         s.to_string()

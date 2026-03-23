@@ -1,12 +1,19 @@
-# cnt — Continente CLI
+# 🛒 cnt
 
 [![CI](https://github.com/nikuscs/continentes/actions/workflows/ci.yml/badge.svg)](https://github.com/nikuscs/continentes/actions/workflows/ci.yml)
 [![Release](https://github.com/nikuscs/continentes/actions/workflows/release.yml/badge.svg)](https://github.com/nikuscs/continentes/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-A command-line tool for browsing [Continente](https://www.continente.pt) supermarket products. Search products, compare prices, check nutritional info, and find stores — all from the terminal.
+**Fast CLI for browsing [Continente](https://www.continente.pt) supermarket products. Search products, compare prices, inspect nutritional info, browse categories, and find nearby stores from the terminal.**
 
-> **Disclaimer**: This project is for educational and personal use. It interacts with publicly accessible endpoints on continente.pt. Not affiliated with Continente or Sonae MC.
+> **Disclaimer:** This project is for **educational purposes and AI automation research only**.
+> The authors are not responsible for any misuse or for any damages resulting from the use of this tool.
+> Users are solely responsible for ensuring compliance with applicable laws and the terms of service
+> of any websites accessed. This software is provided "as-is" without warranty of any kind.
+>
+> This project is not affiliated with Continente or Sonae MC.
+
+> **Note:** This project was partially developed with AI assistance and may contain bugs or unexpected behavior. Use at your own risk.
 
 ## Features
 
@@ -166,6 +173,13 @@ The CLI interacts with Continente's Salesforce Commerce Cloud (SFCC) storefront 
 
 See [`docs/investigation.md`](docs/investigation.md) for the full reverse engineering investigation.
 
+## Related Projects
+
+- [⚖️ lauyer](https://github.com/nikuscs/lauyer) — Fast CLI for searching Portuguese court jurisprudence and legislation
+- [🕷️ crauler](https://github.com/nikuscs/crauler) — Web crawler with proxy routing and HTML→Markdown
+- [🦎 amz-crawler](https://github.com/nikuscs/amz-crawler) — Amazon product crawler with TLS fingerprinting
+- [🕹️ scrauper](https://github.com/nikuscs/scrauper) — Multi-threaded ScreenScraper.fr scraper for ES-DE
+
 ## License
 
-MIT
+MIT — see `LICENSE`.

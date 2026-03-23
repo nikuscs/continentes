@@ -9,7 +9,7 @@ use tracing_subscriber::EnvFilter;
 use continente::api::client::ContinenteClient;
 use continente::api::models::SortRule;
 use continente::commands;
-use continente::config::Config;
+use continente::config::load_config;
 use continente::format::OutputFormat;
 
 #[derive(Parser)]
@@ -19,8 +19,8 @@ struct Cli {
     command: Commands,
 
     /// Output format
-    #[arg(long, default_value = "table", global = true)]
-    format: OutputFormat,
+    #[arg(long, global = true)]
+    format: Option<OutputFormat>,
 
     /// Enable debug logging
     #[arg(long, short, global = true)]
@@ -152,8 +152,9 @@ async fn main() -> Result<()> {
         .with_target(false)
         .init();
 
-    let config = Config::load(cli.config.as_deref());
+    let config = load_config(cli.config.as_deref())?;
     let client = ContinenteClient::new(&config.http)?;
+    let output_format = cli.format.unwrap_or(config.output.format);
 
     let output = match cli.command {
         Commands::Search {
@@ -184,13 +185,22 @@ async fn main() -> Result<()> {
             }
 
             commands::search::run(
-                &client, &query, max, page, sort, brand, price_min, price_max, filters, cli.format,
+                &client,
+                &query,
+                max,
+                page,
+                sort,
+                brand,
+                price_min,
+                price_max,
+                filters,
+                output_format,
             )
             .await?
         }
 
         Commands::Product { pid, nutrition } => {
-            commands::product::run(&client, &pid, nutrition, cli.format).await?
+            commands::product::run(&client, &pid, nutrition, output_format).await?
         }
 
         Commands::Browse {
@@ -198,15 +208,17 @@ async fn main() -> Result<()> {
             max,
             page,
             sort,
-        } => commands::browse::run(&client, &category, max, page, sort, cli.format).await?,
+        } => commands::browse::run(&client, &category, max, page, sort, output_format).await?,
 
-        Commands::Suggest { query } => commands::suggest::run(&client, &query, cli.format).await?,
-
-        Commands::Stores { lat, lon, radius } => {
-            commands::stores::run(&client, lat, lon, radius, cli.format).await?
+        Commands::Suggest { query } => {
+            commands::suggest::run(&client, &query, output_format).await?
         }
 
-        Commands::Categories => commands::categories::run(cli.format),
+        Commands::Stores { lat, lon, radius } => {
+            commands::stores::run(&client, lat, lon, radius, output_format).await?
+        }
+
+        Commands::Categories => commands::categories::run(output_format),
     };
 
     std::io::stdout().write_all(output.as_bytes())?;
