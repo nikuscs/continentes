@@ -1,3 +1,4 @@
+use std::io::Write as _;
 use std::path::PathBuf;
 
 use anyhow::Result;
@@ -7,6 +8,7 @@ use tracing_subscriber::EnvFilter;
 
 use continente::api::client::ContinenteClient;
 use continente::api::models::SortRule;
+use continente::commands;
 use continente::config::Config;
 use continente::format::OutputFormat;
 
@@ -92,7 +94,7 @@ enum Commands {
     /// Browse products by category
     #[command(alias = "b")]
     Browse {
-        /// Category ID (e.g., "laticinios", "frescos")
+        /// Category ID or name (e.g., "laticinios", "frescos")
         category: String,
 
         /// Maximum results
@@ -123,7 +125,7 @@ enum Commands {
         lat: f64,
 
         /// Longitude
-        #[arg(long)]
+        #[arg(long, allow_hyphen_values = true)]
         lon: f64,
 
         /// Search radius in km
@@ -151,26 +153,62 @@ async fn main() -> Result<()> {
         .init();
 
     let config = Config::load(cli.config.as_deref());
-    let _client = ContinenteClient::new(&config.http)?;
+    let client = ContinenteClient::new(&config.http)?;
 
-    match cli.command {
-        Commands::Search { query, .. } => {
-            anyhow::bail!("search command not yet implemented (query: {query})")
+    let output = match cli.command {
+        Commands::Search {
+            query,
+            max,
+            page,
+            sort,
+            brand,
+            price_min,
+            price_max,
+            vegan,
+            gluten_free,
+            lactose_free,
+            bio,
+        } => {
+            let mut filters = Vec::new();
+            if vegan {
+                filters.push(("food.Vegan".to_string(), "true".to_string()));
+            }
+            if gluten_free {
+                filters.push(("food.GlutenFree".to_string(), "true".to_string()));
+            }
+            if lactose_free {
+                filters.push(("food.LactoseFree".to_string(), "true".to_string()));
+            }
+            if bio {
+                filters.push(("food.Biologic".to_string(), "true".to_string()));
+            }
+
+            commands::search::run(
+                &client, &query, max, page, sort, brand, price_min, price_max, filters, cli.format,
+            )
+            .await?
         }
-        Commands::Product { pid, .. } => {
-            anyhow::bail!("product command not yet implemented (pid: {pid})")
+
+        Commands::Product { pid, nutrition } => {
+            commands::product::run(&client, &pid, nutrition, cli.format).await?
         }
-        Commands::Browse { category, .. } => {
-            anyhow::bail!("browse command not yet implemented (category: {category})")
+
+        Commands::Browse {
+            category,
+            max,
+            page,
+            sort,
+        } => commands::browse::run(&client, &category, max, page, sort, cli.format).await?,
+
+        Commands::Suggest { query } => commands::suggest::run(&client, &query, cli.format).await?,
+
+        Commands::Stores { lat, lon, radius } => {
+            commands::stores::run(&client, lat, lon, radius, cli.format).await?
         }
-        Commands::Suggest { query } => {
-            anyhow::bail!("suggest command not yet implemented (query: {query})")
-        }
-        Commands::Stores { lat, lon, .. } => {
-            anyhow::bail!("stores command not yet implemented (lat: {lat}, lon: {lon})")
-        }
-        Commands::Categories => {
-            anyhow::bail!("categories command not yet implemented")
-        }
-    }
+
+        Commands::Categories => commands::categories::run(cli.format),
+    };
+
+    std::io::stdout().write_all(output.as_bytes())?;
+    Ok(())
 }
