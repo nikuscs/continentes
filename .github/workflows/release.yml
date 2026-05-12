@@ -49,6 +49,7 @@ jobs:
     name: Create Tag
     needs: checks
     runs-on: ubuntu-latest
+    environment: production
     permissions:
       contents: write
     outputs:
@@ -249,6 +250,7 @@ jobs:
     needs: [create-tag, build]
     if: failure() && needs.create-tag.result == 'success'
     runs-on: ubuntu-latest
+    environment: production
     permissions:
       contents: write
     steps:
