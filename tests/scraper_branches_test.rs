@@ -96,12 +96,14 @@ fn parse_search_results_handles_invalid_total_and_mixed_tiles() {
             <div
               data-product-tile-impression="{&quot;id&quot;:&quot;6879912&quot;,&quot;name&quot;:&quot;Leite UHT Meio Gordo Continente&quot;,&quot;price&quot;:0.86,&quot;brand&quot;:&quot;Continente&quot;,&quot;category&quot;:&quot;Laticínios e Ovos/Leite/Leite Meio Gordo&quot;,&quot;variant&quot;:&quot;&quot;,&quot;channel&quot;:&quot;&quot;}"
             >
-              <img data-src="https://example.com/tile.jpg" />
+              <img class="ct-tile-image" data-src="https://example.com/tile.jpg" />
               <span class="pwc-tile--price-secondary">0,86€/lt</span>
             </div>
             <div
               data-product-tile-impression="{&quot;id&quot;:&quot;2210946&quot;,&quot;name&quot;:&quot;Leite UHT Meio Gordo Mimosa&quot;,&quot;price&quot;:0.90,&quot;brand&quot;:&quot;Mimosa&quot;,&quot;category&quot;:&quot;Laticínios e Ovos/Leite/Leite Meio Gordo&quot;,&quot;variant&quot;:&quot;&quot;,&quot;channel&quot;:&quot;&quot;}"
-            ></div>
+            >
+              <img class="promo-badge" data-src="https://example.com/badge.png" />
+            </div>
           </body>
         </html>
     "#;
