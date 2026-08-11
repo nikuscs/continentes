@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use reqwest::Client;
+use reqwest::{Client, RequestBuilder, Response, StatusCode};
 use tracing::debug;
 
 use crate::api::models::{
@@ -115,6 +115,8 @@ const USER_AGENT: &str =
 pub struct ContinenteClient {
     client: Client,
     base_url: String,
+    retries: u32,
+    delay: Duration,
 }
 
 impl ContinenteClient {
@@ -137,6 +139,8 @@ impl ContinenteClient {
         Ok(Self {
             client,
             base_url: base_url.trim_end_matches('/').to_string(),
+            retries: config.retries,
+            delay: Duration::from_millis(config.delay_ms),
         })
     }
 
@@ -145,6 +149,54 @@ impl ContinenteClient {
             "{}/on/demandware.store/Sites-continente-Site/default/{}",
             self.base_url, controller
         )
+    }
+
+    async fn send(&self, request: RequestBuilder) -> reqwest::Result<Response> {
+        let mut attempt = 0;
+
+        loop {
+            let Some(next_request) = request.try_clone() else {
+                return request.send().await?.error_for_status();
+            };
+
+            match next_request.send().await {
+                Ok(response) => {
+                    let status = response.status();
+                    if Self::is_retryable_status(status) && attempt < self.retries {
+                        attempt += 1;
+                        debug!(
+                            "Retrying HTTP request after status {status} ({attempt}/{})",
+                            self.retries
+                        );
+                        self.wait_before_retry().await;
+                        continue;
+                    }
+
+                    return response.error_for_status();
+                }
+                Err(error) if attempt < self.retries => {
+                    attempt += 1;
+                    debug!(
+                        "Retrying HTTP request after transport error ({attempt}/{}): {error}",
+                        self.retries
+                    );
+                    self.wait_before_retry().await;
+                }
+                Err(error) => return Err(error),
+            }
+        }
+    }
+
+    fn is_retryable_status(status: StatusCode) -> bool {
+        status == StatusCode::REQUEST_TIMEOUT
+            || status == StatusCode::TOO_MANY_REQUESTS
+            || status.is_server_error()
+    }
+
+    async fn wait_before_retry(&self) {
+        if !self.delay.is_zero() {
+            tokio::time::sleep(self.delay).await;
+        }
     }
 
     /// Search products via Search-ShowAjax. See investigation §4 for HTML response format.
@@ -183,7 +235,7 @@ impl ContinenteClient {
             request = request.query(&[(&n_key, name.as_str()), (&v_key, value.as_str())]);
         }
 
-        let response = request.send().await?.error_for_status()?;
+        let response = self.send(request).await?;
         let html = response.text().await?;
 
         scraper::parse_search_results(&html, query)
@@ -205,7 +257,7 @@ impl ContinenteClient {
             request = request.query(&[("srule", sort.as_str())]);
         }
 
-        let response = request.send().await?.error_for_status()?;
+        let response = self.send(request).await?;
         let html = response.text().await?;
 
         scraper::parse_search_results(&html, cgid)
@@ -220,13 +272,8 @@ impl ContinenteClient {
         let url = self.endpoint("Product-Variation");
         debug!("Fetching product '{pid}'");
 
-        let response = self
-            .client
-            .get(&url)
-            .query(&[("pid", pid)])
-            .send()
-            .await?
-            .error_for_status()?;
+        let request = self.client.get(&url).query(&[("pid", pid)]);
+        let response = self.send(request).await?;
 
         let json: ProductVariationResponse =
             response.json().await.map_err(|e| ContinenteError::Parse {
@@ -248,18 +295,13 @@ impl ContinenteClient {
         let url = self.endpoint("Product-ProductNutritionalInfoTab");
         debug!("Fetching nutrition for pid={pid}, ean={ean}");
 
-        let response = self
-            .client
-            .get(&url)
-            .query(&[
-                ("pid", pid),
-                ("ean", ean),
-                ("supplierid", supplier_id),
-                ("enabledce", "true"),
-            ])
-            .send()
-            .await?
-            .error_for_status()?;
+        let request = self.client.get(&url).query(&[
+            ("pid", pid),
+            ("ean", ean),
+            ("supplierid", supplier_id),
+            ("enabledce", "true"),
+        ]);
+        let response = self.send(request).await?;
 
         let html = response.text().await?;
         Ok(scraper::parse_nutritional_info(&html))
@@ -278,13 +320,8 @@ impl ContinenteClient {
         let url = self.endpoint("SearchServices-GetSuggestions");
         debug!("Getting suggestions for '{query}'");
 
-        let response = self
-            .client
-            .get(&url)
-            .query(&[("q", query)])
-            .send()
-            .await?
-            .error_for_status()?;
+        let request = self.client.get(&url).query(&[("q", query)]);
+        let response = self.send(request).await?;
 
         let html = response.text().await?;
         Ok(scraper::parse_suggestions(&html))
@@ -296,17 +333,12 @@ impl ContinenteClient {
         let url = self.endpoint("Stores-FindStores");
         debug!("Finding stores near ({lat}, {lon}) radius={radius}km");
 
-        let response = self
-            .client
-            .get(&url)
-            .query(&[
-                ("lat", &lat.to_string()),
-                ("long", &lon.to_string()),
-                ("radius", &radius.to_string()),
-            ])
-            .send()
-            .await?
-            .error_for_status()?;
+        let request = self.client.get(&url).query(&[
+            ("lat", &lat.to_string()),
+            ("long", &lon.to_string()),
+            ("radius", &radius.to_string()),
+        ]);
+        let response = self.send(request).await?;
 
         let stores_response: StoresResponse =
             response.json().await.map_err(|e| ContinenteError::Parse {
@@ -323,7 +355,7 @@ impl ContinenteClient {
         let url = format!("{}/folhetos/", self.base_url);
         debug!("Fetching flyers from {url}");
 
-        let response = self.client.get(&url).send().await?.error_for_status()?;
+        let response = self.send(self.client.get(&url)).await?;
 
         let html = response.text().await?;
         scraper::parse_flyers(&html)

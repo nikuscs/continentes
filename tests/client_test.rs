@@ -8,6 +8,10 @@ fn test_client(base_url: &str) -> ContinenteClient {
     ContinenteClient::with_base_url(base_url, &HttpConfig::default()).unwrap()
 }
 
+fn test_client_with_http(base_url: &str, config: &HttpConfig) -> ContinenteClient {
+    ContinenteClient::with_base_url(base_url, config).unwrap()
+}
+
 const SFCC_PATH: &str = "/on/demandware.store/Sites-continente-Site/default";
 
 #[tokio::test]
@@ -323,6 +327,50 @@ async fn client_handles_server_error() {
     let result = client.search("leite", &SearchParams::new()).await;
 
     assert!(result.is_err());
+}
+
+#[tokio::test]
+async fn client_retries_server_errors_according_to_config() {
+    let server = MockServer::start().await;
+
+    Mock::given(method("GET"))
+        .and(path(format!("{SFCC_PATH}/Search-ShowAjax")))
+        .respond_with(ResponseTemplate::new(500))
+        .mount(&server)
+        .await;
+
+    let config = HttpConfig {
+        retries: 2,
+        delay_ms: 0,
+        ..HttpConfig::default()
+    };
+    let client = test_client_with_http(&server.uri(), &config);
+    let result = client.search("leite", &SearchParams::new()).await;
+
+    assert!(result.is_err());
+    assert_eq!(server.received_requests().await.unwrap().len(), 3);
+}
+
+#[tokio::test]
+async fn client_does_not_retry_non_retryable_client_errors() {
+    let server = MockServer::start().await;
+
+    Mock::given(method("GET"))
+        .and(path(format!("{SFCC_PATH}/Search-ShowAjax")))
+        .respond_with(ResponseTemplate::new(404))
+        .mount(&server)
+        .await;
+
+    let config = HttpConfig {
+        retries: 3,
+        delay_ms: 0,
+        ..HttpConfig::default()
+    };
+    let client = test_client_with_http(&server.uri(), &config);
+    let result = client.search("leite", &SearchParams::new()).await;
+
+    assert!(result.is_err());
+    assert_eq!(server.received_requests().await.unwrap().len(), 1);
 }
 
 #[tokio::test]
