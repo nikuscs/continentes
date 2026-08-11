@@ -440,7 +440,7 @@ fn format_flyers_table(flyers: &[Flyer]) -> String {
             "{:<32} {:<40} {}",
             truncate(&f.slug, 31),
             truncate(&f.title, 39),
-            &f.description,
+            f.description,
         );
     }
 
