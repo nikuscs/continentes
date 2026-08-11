@@ -46,7 +46,7 @@ fn extract_total_count(document: &Html) -> u32 {
 
 fn extract_products(document: &Html) -> Vec<SearchProduct> {
     let tile_selector = Selector::parse("[data-product-tile-impression]").expect("valid selector");
-    let img_selector = Selector::parse("img[data-src]").expect("valid selector");
+    let img_selector = Selector::parse("img.ct-tile-image[data-src]").expect("valid selector");
     let unit_price_selector =
         Selector::parse(".pwc-tile--price-secondary").expect("valid selector");
 
