@@ -216,7 +216,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create Release
-        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2
+        uses: softprops/action-gh-release@3d0d9888cb7fd7b750713d6e236d1fcb99157228 # v2
         with:
           tag_name: ${{ needs.create-tag.outputs.tag }}
           name: ${{ env.BINARY_NAME }} ${{ needs.create-tag.outputs.tag }}
